@@ -313,9 +313,15 @@ main { max-width: 46rem; margin: 0 auto; padding: 0 1.5rem 5rem; }
   .site-head .tagline { grid-row: 7; }
   .bay-logo { grid-column: 1 / -1; grid-row: 1 / 4; }
   /* The first function bay sits at the panel's left edge now, so it has no
-     neighbour to be divided from. */
+     neighbour to be divided from.
+
+     THE RULE ITSELF IS NOT TOUCHED HERE. It was overridden when this query
+     stacked all four bays and the divider between them ran horizontally;
+     once the three function bays moved onto one shelf the override was left
+     behind, measuring the clearance from the top of the bay instead of from
+     the bottom of the bar - which started the rule inside the red and ran it
+     through. The base rule is correct at every width. */
   .bay-logo + .bay::before { display: none; }
-  .bay + .bay::before { top: calc(var(--bar) * var(--divider-clear) * var(--pu)); }
   .bay-head { font-size: calc(15 * var(--pu)); padding: .18em calc(6 * var(--pu)) 0; }
   .bay-body { gap: calc(10 * var(--bu)); padding: calc(12 * var(--pu)) calc(4 * var(--pu)); }
   .bay-logo .bay-body { padding-left: calc(16 * var(--pu)); }
