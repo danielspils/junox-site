@@ -82,7 +82,15 @@ main { max-width: 46rem; margin: 0 auto; padding: 0 1.5rem 5rem; }
   --chassis: #696970;    /* measured (105,105,112) */
   --header-red: #b35d62; /* measured (179,94,98) */
   --strip-red: #a64649;  /* measured (166,70,73) */
+  --bar: 29;             /* header bar height in panel units (measured) */
   --foot: 8;             /* strip height in panel units - see .bay-foot */
+  /* THE DIVIDER CLEARS EACH BAR BY THIS PROPORTION OF THE BAR'S OWN HEIGHT.
+     The app carries the same number as bands.dividerClearOfBar in
+     src/panel-layout.js; change it in both. A ratio and not a unit count,
+     because this header draws the panel at a different size - a unit here is
+     a CSS pixel and the face is shorter than the instrument's, so a fixed
+     count that is a hairline there is a visible gap here. */
+  --divider-clear: .107;
   --divider: #c5c6c9;    /* measured (197,198,201) */
   --print: #bebfc1;      /* measured (190,191,193) */
   /* FULL BLEED. A front panel runs the width of the instrument; inset inside
@@ -120,18 +128,20 @@ main { max-width: 46rem; margin: 0 auto; padding: 0 1.5rem 5rem; }
    edge; the strip breaks over that same edge by gapHalf 3 either side. The
    column gap is that 6, and the rule is the 3 in the middle of it.
 
-   THE LENGTH IS MEASURED TOO. The rule starts 8 BELOW the header bar rather
-   than against it, and stops 2.5 above the strip (dividerBottom 293.5);
-   panel-layout.js is explicit that it ends where its fade ends and that the
-   grey below is chassis - "the divider does not continue through the strip
-   gap". Running it corner to corner was tried and is wrong: the rule divides
-   the FACE, and the bars above and below are already divided by their own
-   gaps. */
+   THE RULE STOPS JUST SHORT OF EACH BAR, by --divider-clear of the header
+   bar's height at both ends - the same proportion the app uses, and measured
+   off two close photographs of the instrument (see :root above, and
+   bands.dividerClearOfBar in the app's panel-layout.js).
+
+   Both of the obvious readings are wrong and both were tried. Taking the
+   app's old flat 8 units off the top gives three times the real gap. Running
+   the rule corner to corner gives none at all, and doubles a division the
+   bars already make with their own gaps. */
 .bay + .bay::before {
   content: ""; position: absolute;
   left: calc(-4.5 * var(--pu));
-  top: calc(37 * var(--pu));
-  bottom: calc((var(--foot) + 2.5) * var(--pu));
+  top: calc((var(--bar) + var(--bar) * var(--divider-clear)) * var(--pu));
+  bottom: calc((var(--foot) + var(--bar) * var(--divider-clear)) * var(--pu));
   width: calc(3 * var(--pu)); background: var(--divider);
 }
 
@@ -147,7 +157,7 @@ main { max-width: 46rem; margin: 0 auto; padding: 0 1.5rem 5rem; }
    White, not the measured #f4f4f6: that reads 4.10:1 on this red and plain
    white reads 4.51, which clears the bar this app holds itself to. */
 .bay-head {
-  height: calc(29 * var(--pu));
+  height: calc(var(--bar) * var(--pu));
   background: var(--header-red);
   /* The cap is centred in the bar, which is what the instrument does to
      within a unit (5 above, 4 below). Centring the LINE BOX would sit it high
@@ -305,7 +315,7 @@ main { max-width: 46rem; margin: 0 auto; padding: 0 1.5rem 5rem; }
   /* The first function bay sits at the panel's left edge now, so it has no
      neighbour to be divided from. */
   .bay-logo + .bay::before { display: none; }
-  .bay + .bay::before { top: calc(8 * var(--pu)); }
+  .bay + .bay::before { top: calc(var(--bar) * var(--divider-clear) * var(--pu)); }
   .bay-head { font-size: calc(15 * var(--pu)); padding: .18em calc(6 * var(--pu)) 0; }
   .bay-body { gap: calc(10 * var(--bu)); padding: calc(12 * var(--pu)) calc(4 * var(--pu)); }
   .bay-logo .bay-body { padding-left: calc(16 * var(--pu)); }
