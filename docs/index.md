@@ -2,23 +2,30 @@
 layout: default
 ---
 
-The JUNO-X holds 256 scenes — sixteen banks of sixteen. Getting them into the
-order a show needs, rather than the order you happened to save them in, means a
-lot of button presses on a small screen. And the only copy of any of it lives
-inside the instrument.
+In 2024 I bought a JUNO-X off of Reverb with the hope of replacing my trusty
+Juno-106. I intended to use the JUNO-X for upcoming shows so I wouldn't be
+hauling around a vintage synth, which has been a central sound in my studio for
+years. I thought "a digital Juno-106 … sweet!"
 
-<p class="todo"><strong>YOUR PARAGRAPH GOES HERE.</strong> Both the other sites
-open with the story — how you came to the instrument and what you were trying
-to do with it — and that is the part people actually read. Two or three
-sentences: when the JUNO-X arrived, what it joined or replaced in the rig, and
-the thing about it that sent you to build software. Delete this box when it's
-written.</p>
+If you own a JUNO-X you were probably smirking as you read that last sentence.
+What I learned (and what you know) is that the X is not just a digital 106 with
+more bells and whistles. The "106-ness" of the X is mostly in its design and
+layout—and I soon understood that the JUNO-X was a really complicated
+synthesizer.
 
-After JP Patches for my [JX-3P](https://jx-3p.com){:target="_blank" rel="noopener"}
+I tried for 2 years to wrap my head around it. No matter how many YouTube
+tutorials I watched, pages of the manual I read, and Googling I used to crack
+the JUNO-X code, it came up short. Enter **JUNO-Xtra**—an app I wrote to help me
+decode the JUNO-X so I could use more of its features, easily back up and
+reload sounds, and save banks as custom setlists.
+
+It's late 2026 and I'm just now beginning to understand the complicatedly cool
+JUNO-X. I hope the JUNO-Xtra app helps you do the same.
+
+This is my third synth app. If you're a fellow synthaholic, see also:
+[JP Patches](https://jx-3p.com){:target="_blank" rel="noopener"} for the JX-3P
 and [This Seven Goes to Eleven](https://thissevengoestoeleven.com){:target="_blank" rel="noopener"}
-for my Crumar Seven, I knew the shape of what I wanted: all 256 scenes on one
-screen, drag them where they belong, and write the whole bank back. So here's
-JUNO-Xtra.
+for the Crumar Seven.
 
 <!-- THE STRIP IS BEHIND A SWITCH (site.screenshots in _config.yml). The eight
      files it wants are not captured yet, and Jekyll cannot test whether a file
