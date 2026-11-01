@@ -3,7 +3,7 @@ layout: default
 ---
 
 In 2024 I bought a JUNO-X with the hope of replacing my trusty
-JUNO-106. I intended to use the JUNO-X for playing live to avoid
+JUNO-106. I intended to use the JUNO-X for live shows, to avoid
 hauling around a vintage synth. I thought "a digital JUNO-106 … how cool!"
 
 If you own a JUNO-X you were probably smirking as you read that last sentence.
