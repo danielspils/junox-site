@@ -11,7 +11,7 @@ title: JUNO-Xtra
 # Daniel's, 1 Nov 2026, and not to be smoothed: "complicatedly cool is the hook."
 # It appears in the header strip, the <title> and the og:title, which is why it is here and not hard-coded in
 # the layout - the strip used to carry its own copy, so the page said one thing and a shared link said another.
-tagline: Simplifying a complicatedly cool synth
+tagline: A companion app for the complicatedly cool JUNO-X
 description: Free Mac app for the Roland JUNO-X. Read all 256 scenes, put them in the order your set needs, rename them, build a scene, and back the whole instrument up to a file.
 # THE DOMAIN. Bought, on Cloudflare, and decided: juno-xtra.com, hyphenated.
 # `docs/CNAME` holds the same hostname and is what GitHub Pages reads; this key
