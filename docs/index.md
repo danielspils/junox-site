@@ -16,7 +16,7 @@ I tried for 2 years to wrap my head around it. No matter how many YouTube
 tutorials I watched, pages of the manual I read, and Googling I used to crack
 the JUNO-X code, it came up short. Enter **JUNO-Xtra**—an app I wrote to help
 decode the JUNO-X so I could use more of its features, easily create and back
-up sounds, and save banks as custom setlists.
+up sounds, and save custom setlists.
 
 It's late 2026 and I'm just now beginning to understand the complicatedly cool
 JUNO-X. I hope the JUNO-Xtra app helps you do the same.
