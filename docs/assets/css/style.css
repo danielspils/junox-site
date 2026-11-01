@@ -1,0 +1,404 @@
+/* JUNO-Xtra — white page, with the app icon's dark face bookending it and the
+   logo's blue as the one accent.
+
+   SHARES NO ASSETS with jx-3p.com or thissevengoestoeleven.com. Those two
+   share none with each other either, deliberately, and copying between them is
+   how three sites end up with one bug. Structure is borrowed; nothing else is.
+
+   The type ladder and the colour names come from the APP (roland-junox-editor,
+   docs/DESIGN.md), which is the reference for anything branded. */
+:root {
+  --bg: #ffffff;
+  --raised: #f7f7f8;
+  --line: #e3e3e7;
+  --text: #1b1b1f;
+  --muted: #5f5f68;
+  --dim: #76767f;
+
+  /* The app icon's face. The one real brand surface: build/icon.png and
+     src/img/junox-icon.svg both sit the "Xt" on exactly this. */
+  --panel: #2a2a2d;
+
+  /* The logo's rule, fixed at this value inside junox-logo.svg. Used here for
+     rules, the download bracket and its legend — graphics, not body type. */
+  --blue: #3980c8;
+
+  /* LINKS NEED A DARKER BLUE, and this is not a preference. --blue measures
+     4.12:1 on white: fine for a 4px rule or a 21px legend, under the 4.5:1 a
+     line of body text needs. This one measures 6.07:1. The 7/11 site made the
+     same move for the same reason ("the felt red, dark enough to read on
+     white"). Two tokens, one hue, each for the job it passes. */
+  --blue-ink: #2b659e;
+
+  /* The app's Roland green and its measured lighter variant. The brand green
+     is used only as a large filled block with cream type on it (the Mac
+     button); anything small or thin uses the lit one. DESIGN.md: the brand
+     green measures 1.85:1 on the dark panel, the lit variant 4.2:1. */
+  --green: #1f6e5b;
+  --green-lit: #4fae94;
+  --cream: #f7f1e6;
+  /* Same treatment for the blue, so the two labels are a matched pair on the
+     dark button faces: 5.67:1 and 5.33:1 on --panel. */
+  --blue-lit: #6ea8e0;
+}
+
+* { box-sizing: border-box; margin: 0; padding: 0; }
+
+body {
+  background: var(--bg); color: var(--text);
+  /* The app's own stack (DESIGN.md, "Font: Helvetica, 'Helvetica Neue',
+     Arial, sans-serif"), which is also jx-3p.com's. The 7/11 site uses the
+     system stack instead; Helvetica here keeps the site and the app in one
+     voice, which matters more than matching the other site. */
+  font: 17px/1.65 Helvetica, "Helvetica Neue", Arial, sans-serif;
+  -webkit-font-smoothing: antialiased;
+}
+
+/* ONE COLUMN, and the header strip sits on it too, so the tagline lines up
+   with the first paragraph below it. */
+main { max-width: 46rem; margin: 0 auto; padding: 0 1.5rem 5rem; }
+
+/* ── Header ───────────────────────────────────────────────────────────────
+   A panel sitting on the page, not a full-bleed band: inset, rounded at the
+   top, shallow enough that the wordmark and the strip read as one unit. */
+.site-head { max-width: 78rem; margin: 1rem auto 3rem; padding: 0 1rem; }
+
+.site-head .panel {
+  background: var(--panel);
+  border-radius: 10px 10px 0 0;
+  padding: 1.1rem 0 .9rem;
+}
+.site-head .panel-inner {
+  display: flex; align-items: center;
+  max-width: 46rem; margin: 0 auto; padding: 0 1.5rem;
+}
+
+/* The wordmark is an inlined SVG with its own width/height attributes
+   (1306 x 250). Those are overridden here; the ceiling is in PIXELS on
+   purpose — in rem it depends on the reader's root font size, and at a large
+   one the word grows past the panel. */
+.wordmark { display: block; color: #fff; text-decoration: none; }
+.wordmark svg {
+  display: block; height: auto;
+  width: clamp(170px, 42vw, 300px);
+}
+.wordmark:hover svg { color: var(--cream); }
+
+/* The strip under the panel: the logo's blue as the closing edge, the tagline
+   on the content column, and on a phone the navigation. */
+.strip {
+  border-bottom: 4px solid var(--blue);
+  border-radius: 0 0 3px 3px;
+  background: linear-gradient(180deg, #3a3a3f 0%, #313136 100%);
+  padding: .5rem 0;
+}
+.strip-inner {
+  display: flex; align-items: baseline; gap: 1rem;
+  max-width: 46rem; margin: 0 auto; padding: 0 1.5rem;
+  color: #d8d8de; font-size: .95rem;
+}
+.strip .tagline { flex: 1; }
+
+.strip-nav { display: none; gap: 1.1rem; }
+.strip-nav a, .strip-nav .is-soon {
+  display: inline-flex; align-items: center; gap: .25rem;
+  color: #d8d8de; text-decoration: none; font-weight: 600; white-space: nowrap;
+}
+.strip-nav a:hover { color: #fff; }
+/* Nothing to download yet: dimmed and inert. Driven by site.downloads, the
+   same switch that dims the buttons in the download block. */
+.strip-nav .is-soon { opacity: .45; cursor: default; }
+.strip-nav .dl-ico { width: .85em; height: .85em; flex: none; }
+
+/* Phone: the strip's whole job is the four links. The tagline is the first
+   thing the page says below anyway, and keeping it here squeezes it into a
+   column beside them. THIS BLOCK MUST STAY AFTER the base rules above — on
+   7/11 an earlier media query lost to them on specificity and the nav never
+   appeared at all. */
+@media (max-width: 46rem) {
+  .site-head { padding: 0 .5rem; }
+  .site-head .panel-inner { padding: 0 .9rem; }
+  .strip .tagline { display: none; }
+  .strip-nav {
+    display: flex; flex: 1; flex-wrap: nowrap;
+    justify-content: space-between; gap: .4rem;
+  }
+  .strip-inner { align-items: center; font-size: .9rem; padding: 0 .8rem; }
+}
+
+/* ── Page typography ──────────────────────────────────────────────────── */
+h1 { font-size: 2.1rem; line-height: 1.2; letter-spacing: -.02em; margin: 0 0 1.4rem; }
+/* Section heads are small, uppercase and tracked — the app's own
+   "12px/700 uppercase tracking .12em region header" step, which is also what
+   both other sites do with an h2. */
+h2 {
+  font-size: .82rem; font-weight: 700; letter-spacing: .12em; text-transform: uppercase;
+  color: var(--muted); margin: 2.6rem 0 .9rem;
+}
+h3 { font-size: 1.1rem; margin: 2rem 0 .6rem; }
+p { margin: 0 0 1.15rem; }
+a { color: var(--blue-ink); }
+main ul { margin: 0 0 1.15rem 1.1rem; }
+main li { margin: .3rem 0; }
+.lede { font-size: 1.18rem; }
+.muted { color: var(--muted); }
+strong { font-weight: 700; }
+
+/* A paragraph Daniel still has to write. Visible on purpose: a grey box is
+   easier to find than a comment, and it cannot be published by accident
+   without somebody seeing it. Delete the rule with the last placeholder. */
+.todo {
+  background: #fffbe8; border-left: 4px solid #c39a3a; border-radius: 0 4px 4px 0;
+  padding: .9rem 1.1rem; margin: 0 0 1.15rem; color: #5a4a20; font-size: .95rem;
+}
+
+/* Feature lists: rules instead of bullets, indented so they sit under the
+   heading they belong to. */
+.features { list-style: none; margin: 0 0 1.5rem; padding-left: 1.25rem; }
+.features li { padding: .55rem 0; border-bottom: 1px solid var(--line); margin: 0; }
+.features li:first-child { border-top: 1px solid var(--line); }
+
+/* What is not built yet, said once, in its own box. Both other sites keep
+   this separate from the feature list rather than mixing a "soon" into it —
+   a list that mixes the two is a list you cannot trust. */
+.soon {
+  background: var(--raised); border: 1px solid var(--line); border-radius: 6px;
+  padding: .4rem 1.2rem 1.2rem; margin: 2rem 0 0;
+}
+.soon h2 { margin-top: 1.2rem; }
+.soon ul { margin-bottom: 0; }
+
+/* ── Screenshots: a STRIP, not a grid ─────────────────────────────────────
+   Stacked, four screenshots run the page down several screens before the
+   writing resumes. Across, they read as a filmstrip you open. */
+.shots {
+  display: flex; gap: .5rem; margin: 2rem 0;
+  overflow-x: auto; scroll-snap-type: x mandatory;
+  -webkit-overflow-scrolling: touch; scrollbar-width: thin;
+}
+.shot { position: relative; margin: 0; flex: 1 1 0; min-width: 0; scroll-snap-align: start; }
+/* Too narrow to show the set at any useful size, so show one and a bit — the
+   part-visible neighbour is what says the strip keeps going. */
+@media (max-width: 44rem) { .shot { flex: 0 0 76%; } }
+.shot-open {
+  display: block; width: 100%; padding: 0; border: 1px solid var(--line);
+  border-radius: 6px; overflow: hidden; background: none; cursor: zoom-in;
+  transition: border-color .15s ease, transform .15s ease;
+}
+.shot-open:hover, .shot-open:focus-visible { border-color: var(--blue); transform: translateY(-2px); }
+.shot-open img { display: block; width: 100%; height: auto; }
+@media (prefers-reduced-motion: reduce) {
+  .shot-open { transition: none; }
+  .shot-open:hover, .shot-open:focus-visible { transform: none; }
+}
+
+dialog.shot-modal {
+  width: min(77vw, 1280px); padding: 0; border: none; border-radius: 8px;
+  background: none; overflow: visible;
+  /* The UA centres a modal dialog with `margin: auto`, which the `* {margin:0}`
+     reset at the top of this file wipes out. Put back explicitly. */
+  margin: auto;
+  /* NO `position` here, deliberately. A modal <dialog> centres itself in the
+     VIEWPORT only while it keeps the UA's `position: fixed`. Setting
+     `relative` lays it out against the document instead, and on a phone,
+     tapping a screenshot 600px down the page dims the screen and puts the
+     picture 600px above it, off-screen. The arrows do not need `relative`:
+     `fixed` is a containing block for absolute children just the same. */
+}
+dialog.shot-modal::backdrop { background: rgba(0, 0, 0, .72); }
+/* Stop the page scrolling behind the open picture. Keyed off the [open]
+   attribute the browser sets and clears itself, so no exit path can leave the
+   page unscrollable. */
+html:has(dialog.shot-modal[open]) { overflow: hidden; }
+dialog.shot-modal img { display: block; width: 100%; height: auto; border-radius: 8px; cursor: zoom-out; }
+.shot-caption { color: #e8e8ea; text-align: center; font-size: .9rem; margin: .6rem 0 0; }
+.shot-nav {
+  position: absolute; top: 50%; transform: translateY(-50%);
+  width: 2.6rem; height: 3.4rem; border: none; border-radius: 6px;
+  background: rgba(0, 0, 0, .55); color: #fff; font-size: 1.9rem; line-height: 1;
+  cursor: pointer; display: flex; align-items: center; justify-content: center;
+}
+.shot-nav:hover { background: rgba(0, 0, 0, .8); }
+.shot-nav.prev { left: .5rem; }
+.shot-nav.next { right: .5rem; }
+@media (max-width: 34rem) { .shot-nav { width: 2.1rem; height: 2.8rem; font-size: 1.5rem; } }
+/* On a phone, fitting a 1200px-wide app window to the screen makes it about
+   210px tall — barely larger than the thumbnail it opened from. So it opens
+   at a size you can read and pans sideways instead. */
+@media (max-width: 44rem) {
+  dialog.shot-modal { width: 96vw; overflow-x: auto; overflow-y: hidden; }
+  dialog.shot-modal img { width: 900px; max-width: none; cursor: grab; }
+  /* Pinned to the viewport, or they scroll away the moment you pan. */
+  .shot-nav { position: fixed; }
+}
+
+/* ── Downloads ────────────────────────────────────────────────────────────
+   Two buttons under a bracketed DOWNLOAD legend. The bracket is 7/11's
+   treatment (there it is the Crumar's CLAVI TABS hairline); the two coloured
+   platform buttons are jx-3p.com's. The legend and the hairline are the
+   logo's blue, which is the only line on this site that is not grey.
+
+   WHY NOT THE JUNO-X's OWN PANEL BUTTONS: the instrument's panel is already
+   drawn, carefully and with a measured palette, inside the app
+   (src/panel-svg.js). A second drawing of it on the web is two drawings of
+   one thing that will drift. If this ever becomes panel artwork it should be
+   generated from the app's, not redrawn. */
+.downloads { margin: 1.8rem 0 .9rem; }
+.dl-legend {
+  font-size: 1.05rem; font-weight: 700; letter-spacing: .1em;
+  color: var(--blue-ink); margin: 0 0 .15rem;
+}
+.dl-bracket { display: block; width: 15.5rem; max-width: 100%; height: .7rem; }
+.dl-bracket path { fill: none; stroke: var(--blue); stroke-width: 1; }
+
+.dl-row { display: flex; gap: .7rem; margin: .35rem 0 0; flex-wrap: wrap; }
+.dl-btn {
+  display: inline-flex; align-items: center; gap: .45rem;
+  min-width: 7.2rem; justify-content: center;
+  padding: .7rem 1.3rem; border-radius: 5px;
+  background: var(--panel); border: 1px solid #45454c;
+  font-weight: 700; font-size: 1rem; letter-spacing: .04em;
+  text-decoration: none;
+}
+.dl-btn .dl-ico { width: 1em; height: 1em; flex: none; }
+/* MAC green, PC blue — the app's own two colours, in their MEASURED variants,
+   because here they are type on a dark face and not a filled block.
+   5.33:1 and 5.67:1 on --panel. */
+.dl-btn.is-mac { color: var(--green-lit); }
+.dl-btn.is-pc { color: var(--blue-lit); }
+.dl-btn:hover { background: #35353a; border-color: #6b6b74; }
+.dl-btn:focus-visible { outline: 2px solid var(--blue); outline-offset: 2px; }
+
+/* NOTHING TO DOWNLOAD YET. Unavailable is a SHAPE change here, not just a
+   paler colour: the fill goes, the border goes dashed, the pointer does not
+   change. The app made the same correction — a disabled primary button that
+   only dropped to 45% opacity was a slightly different grey on grey, and
+   Daniel is colourblind. */
+.dl-btn.is-soon {
+  background: none; border-style: dashed; border-color: #b9b9c2;
+  color: var(--dim); cursor: default;
+}
+.dl-btn.is-soon:hover { background: none; border-color: #b9b9c2; }
+
+/* WHICH VERSION THE BUTTON WILL HAND YOU. Ships hidden, revealed only once
+   the relay has answered. An absent version is a small loss; a stale one, left
+   over from a previous release, is the thing worth avoiding. */
+.dl-version {
+  color: var(--muted); font-size: .9rem; font-variant-numeric: tabular-nums;
+  margin: .8rem 0 1.1rem;
+}
+.dl-version[hidden] { display: none; }
+
+/* A first-run warning, named before it happens. Quieter than the donation
+   line because it only concerns some visitors. */
+.install-note {
+  color: var(--muted); font-size: .9rem; line-height: 1.5;
+  margin: 0 0 1.1rem; max-width: 32rem;
+}
+
+/* The install note is still a PLACEHOLDER, so it carries .todo as well. Both
+   are single-class selectors, which means .install-note below would simply win
+   on source order and quietly repaint the yellow box's text grey — the exact
+   shape the app's DESIGN.md calls "rules that were written to win and lost".
+   So the pairing is stated rather than left to the cascade. Delete this rule
+   when the placeholder goes. */
+.todo.install-note { color: #5a4a20; font-size: .95rem; max-width: none; }
+
+/* PRESENT, NOT ASKED: a line under the buttons, no prompt and nothing to
+   dismiss. Nobody donates for software they have not run. */
+.donate-line { color: var(--dim); font-size: .95rem; margin: 0 0 1.6rem; }
+
+/* ── Notes index ──────────────────────────────────────────────────────── */
+.notes-head {
+  position: relative; padding-left: .75rem; margin: 0 0 .45rem;
+  font-size: .82rem; font-weight: 700; letter-spacing: .12em; text-transform: uppercase;
+}
+.notes-head::before {
+  content: ""; position: absolute; left: 0; top: .05em; bottom: .05em;
+  width: 4px; background: var(--blue);
+}
+.notes-subhead { font-style: italic; color: var(--muted); margin: 0 0 1.6rem; }
+.notes-list { margin-top: 1.6rem; }
+.note-entry { padding: 1.5rem 0; border-top: 1px solid var(--line); }
+.note-entry:last-child { border-bottom: 1px solid var(--line); }
+.note-entry-date { display: block; color: var(--muted); font-size: .9rem; margin-bottom: .3rem; }
+/* The .notes-list prefix outranks the global link colour. */
+.notes-list .note-entry-title {
+  display: inline-block; font-size: 1.3rem; font-weight: 600; line-height: 1.3;
+  color: var(--text); text-decoration: none; transition: color .15s ease;
+}
+.notes-list .note-entry-title:hover { color: var(--blue-ink); }
+.note-entry-excerpt { margin: .45rem 0 0; color: var(--muted); }
+.notes-list .note-entry-more {
+  display: inline-block; margin-top: .7rem; font-weight: 600;
+  color: var(--blue-ink); text-decoration: none;
+}
+.notes-list .note-entry-more:hover { text-decoration: underline; }
+.notes-empty { margin-top: 1.6rem; color: var(--muted); font-style: italic; }
+.post-date { color: var(--muted); font-size: .9rem; margin-top: -.8rem; }
+
+/* Images inside a Notes post: a modest thumbnail that expands on click, using
+   the homepage's own lightbox (shot.js wraps these), so the site has ONE
+   enlarge mechanism rather than two that drift. Authoring stays plain
+   markdown — ![alt](/assets/img/x.png) — with no separate -thumb file. */
+.post-shot {
+  display: block; margin: 1.75em auto; padding: 0;
+  background: none; border: none; cursor: zoom-in;
+}
+.post-shot img {
+  display: block; max-width: 100%; height: auto; border-radius: 6px;
+  box-shadow: 0 2px 12px rgba(0, 0, 0, .12);
+  transition: transform .18s ease;
+}
+@media (min-width: 700px) { .post-shot img { max-width: 380px; } }
+.post-shot:hover img { transform: scale(1.04); }
+.post-shot:focus-visible img { outline: 2px solid var(--blue); outline-offset: 3px; }
+@media (prefers-reduced-motion: reduce) {
+  .post-shot img { transition: none; }
+  .post-shot:hover img { transform: none; }
+}
+
+/* ── Contact form (Web3Forms — no backend of our own) ─────────────────── */
+.contact-form { display: flex; flex-direction: column; gap: .4rem; max-width: 34rem; }
+.contact-form label { font-size: .9rem; color: var(--muted); margin-top: .6rem; }
+/* Every text-ish input, not just one named type: on 7/11 a rule written for
+   input[type=email] meant the name field added later rendered with the
+   browser's default box beside a styled one. The honeypot is excluded by type
+   so it stays invisible. */
+.contact-form input:not([type=checkbox]):not([type=hidden]), .contact-form textarea {
+  font: inherit; font-size: 1rem; padding: .55rem .7rem;
+  border: 1px solid var(--line); border-radius: 4px; background: #fff; color: var(--text);
+}
+.contact-form textarea { resize: vertical; }
+.contact-form button {
+  align-self: flex-start; margin-top: 1rem;
+  font: inherit; font-size: 1rem; font-weight: 700; cursor: pointer;
+  padding: .6rem 1.5rem; border: none; border-radius: 4px;
+  /* The app's primary action: the brand green as a large filled block with
+     cream type on it, which is the one place it is legible. */
+  background: var(--green); color: var(--cream);
+}
+.contact-form button:hover { filter: brightness(1.12); }
+.contact-form .hp { position: absolute; left: -9999px; }
+
+/* ── Footer ───────────────────────────────────────────────────────────── */
+.site-foot {
+  max-width: 46rem; margin: 0 auto; padding: 1.5rem;
+  border-top: 1px solid var(--line); color: var(--muted); font-size: .9rem;
+}
+.foot-strip { height: 4px; background: var(--blue); }
+.foot-inner {
+  display: flex; align-items: center; justify-content: center;
+  flex-wrap: wrap; gap: .5rem;
+  max-width: 46rem; margin: 0 auto; padding: 1.4rem 1.5rem .4rem;
+  color: var(--muted); font-size: .9rem; text-align: center;
+}
+.foot-dot { color: var(--line); }
+.foot-ig { display: inline-flex; align-items: center; color: var(--muted); margin-left: .2rem; }
+.foot-ig:hover { color: var(--blue-ink); }
+.foot-fine {
+  max-width: 46rem; margin: 0 auto; padding: 0 1.5rem 2.5rem;
+  color: var(--dim); font-size: .82rem; text-align: center;
+}
+
+@media (max-width: 34rem) { body { font-size: 16px; } h1 { font-size: 1.7rem; } }

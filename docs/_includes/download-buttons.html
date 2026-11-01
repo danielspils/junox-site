@@ -1,0 +1,41 @@
+<!-- The page's downloads: a bracketed DOWNLOAD legend over two platform
+     buttons. ONE include, used once on the homepage; if a second page ever
+     needs downloads it uses this file rather than its own copy.
+
+     Both buttons are inert while site.downloads is empty — dashed outline, no
+     pointer — which is the same switch that dims the words in the phone
+     strip. Pasting a URL into _config.yml lights up both places at once.
+
+     Today they are both correctly inert: package.json builds `--mac dir
+     --arm64` with `identity: null`, so there is no .dmg, no signature and no
+     Windows target to point at. -->
+<div class="downloads">
+  <p class="dl-legend">DOWNLOAD</p>
+  <!-- The bracket: a hairline that turns down toward the pair it labels.
+       Drawn, not a border, because a border cannot turn down at the ends. -->
+  <svg class="dl-bracket" viewBox="0 0 248 11" aria-hidden="true" preserveAspectRatio="none">
+    <path d="M1 10.5V1h246v9.5"/>
+  </svg>
+
+  {% capture dl_icon %}<svg class="dl-ico" viewBox="0 0 16 16" aria-hidden="true"
+    fill="none" stroke="currentColor" stroke-width="1.7" stroke-linecap="round"
+    stroke-linejoin="round"><path d="M8 2.5v6.5M5 6.6 8 9.6l3-3"/><path d="M3.4 13h9.2"/></svg>{% endcapture %}
+
+  <div class="dl-row">
+    {% if site.downloads.mac %}
+      <a class="dl-btn is-mac" href="{{ site.downloads.mac }}">{{ dl_icon }}MAC</a>
+    {% else %}
+      <span class="dl-btn is-mac is-soon" title="Not released yet">{{ dl_icon }}MAC</span>
+    {% endif %}
+
+    {% if site.downloads.pc %}
+      <a class="dl-btn is-pc" href="{{ site.downloads.pc }}">{{ dl_icon }}PC</a>
+    {% else %}
+      <span class="dl-btn is-pc is-soon" title="Mac only for now">{{ dl_icon }}PC</span>
+    {% endif %}
+  </div>
+</div>
+
+<!-- Filled in by assets/js/download.js from the relay's /version, never
+     written down in this repo. -->
+<p class="dl-version" id="dl-version" hidden></p>

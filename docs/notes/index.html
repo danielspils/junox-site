@@ -1,0 +1,26 @@
+---
+layout: default
+title: Notes
+description: Notes on building JUNO-Xtra — what the JUNO-X does over SysEx, what it refuses to do, and what had to be measured on the instrument to find out.
+---
+
+<p class="notes-head">Notes</p>
+<p class="notes-subhead">What the instrument turned out to do, and what it took to find out.</p>
+
+<!-- Laid out the way jx-3p.com's index is: a dated entry per post with the
+     opening paragraph and a way in. A bare list of titles gives a reader a
+     date and a title and nothing to decide on. -->
+{% if site.posts.size > 0 %}
+<div class="notes-list">
+  {% for post in site.posts %}
+  <div class="note-entry">
+    <span class="note-entry-date">{{ post.date | date: "%B %-d, %Y" }}</span>
+    <a class="note-entry-title" href="{{ post.url | relative_url }}">{{ post.title }}</a>
+    <p class="note-entry-excerpt">{{ post.excerpt | strip_html | truncatewords: 40 }}</p>
+    <a class="note-entry-more" href="{{ post.url | relative_url }}">Read on →</a>
+  </div>
+  {% endfor %}
+</div>
+{% else %}
+<p class="notes-empty">Nothing here yet.</p>
+{% endif %}

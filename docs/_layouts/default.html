@@ -1,0 +1,135 @@
+<!doctype html>
+<html lang="en">
+<head>
+  <meta charset="utf-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1">
+  <title>{% if page.title %}{{ page.title }} · {{ site.title }}{% else %}{{ site.title }} — {{ site.tagline }}{% endif %}</title>
+  <meta name="description" content="{{ page.description | default: site.description }}">
+  <meta name="robots" content="{{ page.robots | default: 'index, follow' }}">
+  <link rel="canonical" href="{{ page.url | absolute_url }}">
+
+  <!-- Favicon. assets/img/favicon.svg is a COPY of the app's own
+       src/img/junox-icon.svg — the "Xt" mark, white on #2a2a2d, which is the
+       one drawing that stays legible at 16px. The PNG fallbacks are not here
+       yet; see README. ?v=1 because Safari caches a favicon against its URL
+       and will keep showing an old one until the address changes. -->
+  <link rel="icon" href="{{ '/assets/img/favicon.svg' | relative_url }}?v=1" type="image/svg+xml">
+
+  <!-- Link previews. No share card exists yet (see README); until one does,
+       og:image is left out rather than pointed at a file that 404s. -->
+  <meta property="og:type" content="website">
+  <meta property="og:site_name" content="{{ site.title }}">
+  <meta property="og:title" content="{% if page.title %}{{ page.title }}{% else %}{{ site.title }} — {{ site.tagline }}{% endif %}">
+  <meta property="og:description" content="{{ page.description | default: site.description }}">
+  <meta property="og:url" content="{{ page.url | absolute_url }}">
+  <meta name="twitter:card" content="summary">
+
+  <!-- Structured data, the way jx-3p.com has it: tells Google this is a free
+       macOS app. NO softwareVersion key — a version written down here is a lie
+       waiting for the next release; the relay reports the real one. -->
+  <script type="application/ld+json">
+  {
+    "@context": "https://schema.org",
+    "@type": "SoftwareApplication",
+    "name": "{{ site.title }}",
+    "applicationCategory": "MultimediaApplication",
+    "operatingSystem": "macOS (Apple Silicon)",
+    "description": "{{ site.description }}",
+    "url": "{{ site.url }}",
+    "author": { "@type": "Person", "name": "Daniel Spils" },
+    "offers": { "@type": "Offer", "price": "0", "priceCurrency": "USD" }
+  }
+  </script>
+
+  <link rel="alternate" type="application/atom+xml" title="{{ site.title }}" href="{{ '/feed.xml' | absolute_url }}">
+  <link rel="stylesheet" href="{{ '/assets/css/style.css' | relative_url }}?v={{ site.time | date: '%s' }}">
+  <script defer src="{{ '/assets/js/shot.js' | relative_url }}?v={{ site.time | date: '%s' }}"></script>
+  <script defer src="{{ '/assets/js/download.js' | relative_url }}?v={{ site.time | date: '%s' }}"></script>
+</head>
+<body>
+  <!-- The header is the app's own icon surface: the #2a2a2d face the "Xt"
+       sits on, with the logo's blue rule closing it. Both other sites build
+       their header out of the INSTRUMENT (the JX-3P's bank swoops, the
+       Crumar's panel and felt). This one is built out of the APP, because the
+       JUNO-X's own front panel is already drawn inside the app and copying it
+       onto the web would be two drawings of one thing, drifting. -->
+  <header class="site-head">
+    <div class="panel">
+      <div class="panel-inner">
+        <!-- Inlined, not an <img>: junox-logo.svg paints the word with
+             fill="currentColor" so it takes the colour of whatever it sits on.
+             An <img> cannot inherit colour, and this is the whole reason the
+             wordmark was traced that way. Do NOT set this word as live text —
+             the face is Eurostile Bold Extended, which is licensed and cannot
+             ship. It is paths. -->
+        <a class="wordmark" href="{{ '/' | relative_url }}" aria-label="{{ site.title }} home">
+          {% include junox-logo.svg %}
+        </a>
+      </div>
+    </div>
+    <div class="strip">
+      <div class="strip-inner">
+        <span class="tagline">A desktop companion app for the Roland JUNO-X</span>
+        <!-- Phone nav. The strip carries the downloads too, each with the
+             download mark so they read as downloads and not as two more pages.
+             Dimmed and unclickable until site.downloads has a URL — the same
+             thing the dimmed button says in the download block below. -->
+        <nav class="strip-nav">
+          {% capture dl_icon %}<svg class="dl-ico" viewBox="0 0 16 16" aria-hidden="true"
+            fill="none" stroke="currentColor" stroke-width="1.7" stroke-linecap="round"
+            stroke-linejoin="round"><path d="M8 2.5v6.5M5 6.6 8 9.6l3-3"/><path d="M3.4 13h9.2"/></svg>{% endcapture %}
+          {% if site.downloads.mac %}
+            <a class="dl-link dl-mac" href="{{ site.downloads.mac }}">{{ dl_icon }}Mac</a>
+          {% else %}
+            <span class="is-soon" title="Not released yet">{{ dl_icon }}Mac</span>
+          {% endif %}
+          {% if site.downloads.pc %}
+            <a class="dl-link dl-pc" href="{{ site.downloads.pc }}">{{ dl_icon }}PC</a>
+          {% else %}
+            <span class="is-soon" title="Mac only for now">{{ dl_icon }}PC</span>
+          {% endif %}
+          <a href="{{ '/notes/' | relative_url }}">Notes</a>
+          <a href="{{ '/contact/' | relative_url }}">Contact</a>
+        </nav>
+      </div>
+    </div>
+  </header>
+
+  <main>{{ content }}</main>
+
+  <footer class="site-foot">
+    <!-- The blue rule again, closing the page the way the header opens it. -->
+    <div class="foot-strip" aria-hidden="true"></div>
+    <div class="foot-inner">
+      <a href="{{ site.github }}" rel="noopener">GitHub</a>
+      <span class="foot-dot" aria-hidden="true">·</span>
+      <a href="{{ '/privacy/' | relative_url }}">Privacy</a>
+      <span class="foot-dot" aria-hidden="true">·</span>
+      <span>Made by Daniel Spils</span>
+      <a class="foot-ig" href="{{ site.instagram }}" rel="noopener"
+         aria-label="Daniel Spils on Instagram" title="Instagram">
+        <svg viewBox="0 0 24 24" width="18" height="18" aria-hidden="true" fill="none"
+             stroke="currentColor" stroke-width="1.8">
+          <rect x="3" y="3" width="18" height="18" rx="5"/>
+          <circle cx="12" cy="12" r="4"/>
+          <circle cx="17.2" cy="6.8" r="1.1" fill="currentColor" stroke="none"/>
+        </svg>
+      </a>
+    </div>
+    <p class="foot-fine">Not affiliated with, funded by, or endorsed by Roland Corporation.
+      “JUNO”, “JUNO-X” and “Roland” are trademarks of Roland Corporation.</p>
+  </footer>
+
+  {% if site.goatcounter %}
+  <!-- GoatCounter — no cookies, nothing to consent to.
+       Dashboard: https://{{ site.goatcounter }}.goatcounter.com
+
+       PAGE VIEWS ONLY. Download presses are counted by the relay, server-side,
+       at the moment of redirect. A click event here would lose the race
+       against the navigation that follows it and produce a number that looks
+       like a count and is not. -->
+  <script data-goatcounter="https://{{ site.goatcounter }}.goatcounter.com/count"
+          async src="//gc.zgo.at/count.js"></script>
+  {% endif %}
+</body>
+</html>

@@ -1,0 +1,90 @@
+# Jekyll config for the JUNO-Xtra site (GitHub Pages source: /docs).
+#
+# No `theme:` key, on purpose — the same choice both other sites made.
+# _layouts/default.html and assets/css/style.css own the look entirely, with
+# no default theme CSS leaking in.
+#
+# WHY /docs AND NOT A /site FOLDER: GitHub Pages will only serve the repo
+# root or /docs. jx-3p.com and thissevengoestoeleven.com both use /docs.
+
+title: JUNO-Xtra
+tagline: Roland JUNO-X scene librarian, bank editor, and backup for Mac
+description: Free Mac app for the Roland JUNO-X. Read all 256 scenes, put them in the order your set needs, rename them, build a scene, and back the whole instrument up to a file.
+# THE DOMAIN. Bought, on Cloudflare, and decided: juno-xtra.com, hyphenated.
+# `docs/CNAME` holds the same hostname and is what GitHub Pages reads; this key
+# is what Jekyll uses to build absolute URLs (canonical, og:url, feed.xml,
+# sitemap.xml). THE TWO MUST AGREE — a mismatch gives every page a canonical
+# pointing somewhere it is not served from.
+# baseurl is empty because the site is served at the root of its own domain,
+# not under a /path. It is written out rather than left absent so that
+# `relative_url` has something to read and the answer is not a guess.
+url: "https://juno-xtra.com"
+baseurl: ""
+
+# THE DOWNLOAD LINKS LIVE HERE AND NOWHERE ELSE.
+#
+# Empty means there is nothing to download yet, and the page says so the same
+# way in both places it appears: a dimmed button in the download block and a
+# dimmed word in the phone strip. Paste a URL here and both light up together.
+# There is no second switch to forget.
+#
+# TODAY BOTH ARE EMPTY AND THAT IS CORRECT. package.json builds `--mac dir
+# --arm64` with `identity: null`: there is no .dmg, no signature, and no
+# Windows target. Nothing exists to link to.
+#
+# WHEN THERE IS: point these at a relay, not at GitHub. Both other sites do
+# (lend.jx-3p.com, ping.thissevengoestoeleven.com). The relay 302s to the
+# right installer for the platform, which means the button is correct with
+# JavaScript off, and it counts the press server-side at the moment of
+# redirect — where nothing can race it. Do NOT count downloads with a
+# GoatCounter click event: on 7/11 that recorded one press against the relay's
+# forty-one for the same clicks, because the browser navigates away and the
+# event loses.
+downloads:
+  mac: ""
+  pc: ""
+
+# THE SCREENSHOT STRIP, one switch, same pattern as the downloads above.
+#
+# assets/img/screenshots/ is empty: the four pairs index.md wants have not been
+# captured yet. Jekyll cannot test whether a file exists, so a strip left
+# switched on draws four broken-image icons across the top of the homepage —
+# which looks like a broken site rather than an unfinished one.
+#
+# Set this to true the moment all eight files are in place (four PNGs and four
+# thumbnails, named as index.md has them). Nothing else needs changing.
+screenshots: false
+
+# Ko-fi, the same destination as the other two sites.
+donate: "https://ko-fi.com/danielspils"
+
+# The app's source repo. NOTE THE TWO DIFFERENT REPOS: the app is
+# roland-junox-editor; this site is its own repo. Do not cross them.
+github: "https://github.com/danielspils/roland-junox-editor"
+instagram: "https://www.instagram.com/daniel.spils/"
+
+# GoatCounter: page views and referrers, no cookies, so no consent banner.
+# PAGE VIEWS ONLY — download presses are the relay's job (see above).
+# The site has to be created at goatcounter.com first; this is only the half
+# that lives in the page. Empty means no analytics at all, which is what this
+# scaffold ships with.
+goatcounter: ""
+
+# Both Pages-native: sitemap.xml for search engines, feed.xml for RSS (and for
+# post-to-email later, the way jx-3p.com does it).
+plugins:
+  - jekyll-sitemap
+  - jekyll-feed
+
+defaults:
+  - scope: { path: "", type: "posts" }
+    values: { layout: "post", permalink: /notes/:title/ }
+
+# INTERNAL NOTES ARE NOT THE SITE. jx-3p.com learned this the hard way: 36
+# .md files in its docs/ had no front matter, so Jekyll copied them verbatim
+# and they were live — jx-3p.com/SIGNING.md returned 200 and published Azure
+# account identifiers. Keep maintainer notes out of this folder entirely; this
+# list is the second line of defence, not the first.
+exclude:
+  - README.md
+  - assets/img/screenshots/README.md
