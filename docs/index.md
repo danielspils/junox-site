@@ -2,22 +2,22 @@
 layout: default
 ---
 
-In 2024 I bought a JUNO-X off of Reverb with the hope of replacing my trusty
+In 2024 I bought a JUNO-X with the hope of replacing my trusty
 Juno-106. I intended to use the JUNO-X for upcoming shows so I wouldn't be
-hauling around a vintage synth, which has been a central sound in my studio for
-years. I thought "a digital Juno-106 … sweet!"
+hauling around a vintage synth, which had been a central sound in my studio for
+years. I thought "a digital Juno-106 … how cool!"
 
 If you own a JUNO-X you were probably smirking as you read that last sentence.
 What I learned (and what you know) is that the X is not just a digital 106 with
-more bells and whistles. The "106-ness" of the X is mostly in its design and
-layout—and I soon understood that the JUNO-X was a really complicated
+more bells and whistles. The "106-ness" of the X is mostly in its hardware
+design—and I soon learned that the JUNO-X was a really complicated
 synthesizer.
 
 I tried for 2 years to wrap my head around it. No matter how many YouTube
 tutorials I watched, pages of the manual I read, and Googling I used to crack
 the JUNO-X code, it came up short. Enter **JUNO-Xtra**—an app I wrote to help me
-decode the JUNO-X so I could use more of its features, easily back up and
-reload sounds, and save banks as custom setlists.
+decode the JUNO-X so I could use more of its features, easily create and back
+up sounds, and save banks as custom setlists.
 
 It's late 2026 and I'm just now beginning to understand the complicatedly cool
 JUNO-X. I hope the JUNO-Xtra app helps you do the same.
@@ -72,19 +72,15 @@ for the Crumar Seven.
 ## What JUNO-Xtra can do today
 
 <ul class="features">
-  <li>Connect over USB — no dongle, no app in a browser, no Wi-Fi to forget</li>
-  <li>Read all 16 banks and all 256 scenes off the instrument</li>
-  <li>Drag scenes into the order you want, then write the new bank order back</li>
-  <li>Rename scenes</li>
-  <li>Build a scene: choose the tone each of the five parts plays, and draw the keyboard split on a keybed — every part's key range, its velocity range and its fades — then save it into the scene</li>
-  <li>Turn the effects while you listen: MFX, chorus, delay, reverb and drive, each change heard on the instrument the moment you make it. These are live edits, the same as moving a knob on the panel — nothing in the effects view can write to stored memory, so recalling a scene puts everything back</li>
-  <li>Save a bank as a setlist under a show's name, and load it back into whichever bank you're on months later</li>
-  <li>A setlist records which user tones its scenes point at, and says which of them have changed since you saved it — before it loads anything</li>
-  <li>Back up the whole instrument, or one bank on its own, to a file</li>
-  <li>Restore from a backup — all of it, one bank, or the scenes you pick</li>
-  <li>Read what the instrument is set to: 102 System settings off the JUNO-X, with the button route to change each one on the instrument itself</li>
-  <li>Every write is read back off the instrument and checked against what was sent</li>
-  <li>A copy is saved before anything is overwritten, so there is something to go back to</li>
+  <li>Connect over USB</li>
+  <li>Back up &amp; restore a single bank or all 16 banks</li>
+  <li>Reorder scenes with drag-and-drop</li>
+  <li>Rename scenes with your laptop keyboard</li>
+  <li>Build a scene with ease</li>
+  <li>Visually adjust keyboard zones, octaves and velocity</li>
+  <li>Audition effects as you listen</li>
+  <li>Save a bank as a setlist</li>
+  <li>For Mac &amp; PC</li>
 </ul>
 
 <div class="soon" markdown="1">
@@ -93,7 +89,6 @@ for the Crumar Seven.
 
 <ul class="features">
   <li><strong>Anything to download.</strong> There is no installer yet: the Mac build isn't signed or packaged, which is why both buttons below are dark. That is the one thing standing between this page and a release.</li>
-  <li><strong>A Windows build.</strong> Mac only for now.</li>
   <li><strong>Changing anything on the Settings page.</strong> It reads; it does not write, and that's on purpose: the JUNO-X accepts a System edit while it's powered and throws it away at the next power-off unless you do a SYSTEM WRITE on the panel yourself. So the page shows you the setting and the buttons to press on the instrument, rather than writing something that won't survive the night.</li>
 </ul>
 
