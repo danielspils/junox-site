@@ -14,7 +14,7 @@ title: JUNO-Xtra
 # THE HOOK IS MARKED UP HERE, and stripped where markup cannot go. The header strip renders it as written; the
 # <title> and og:title are plain text, so they take it through `strip_html` - put a tag in those and the browser tab
 # reads "<strong>" out loud. One value either way, so the page and a shared link can never say different things.
-tagline: A companion app to simplify the <strong>complicatedly cool</strong> JUNO-X
+tagline: Software to simplify the <strong>complicatedly cool</strong> JUNO-X
 description: Free Mac app for the Roland JUNO-X. Read all 256 scenes, put them in the order your set needs, rename them, build a scene, and back the whole instrument up to a file.
 # THE DOMAIN. Bought, on Cloudflare, and decided: juno-xtra.com, hyphenated.
 # `docs/CNAME` holds the same hostname and is what GitHub Pages reads; this key

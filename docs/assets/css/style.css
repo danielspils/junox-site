@@ -78,13 +78,17 @@ main { max-width: 46rem; margin: 0 auto; padding: 0 1.5rem 5rem; }
    keeping the instrument's internal proportions at a size the web can use. */
 .site-head {
   --pu: 1px;            /* panel unit: bars, type, dividers */
-  --bu: 1px;             /* button unit: bezel, face, ridge */
+  --bu: .75px;             /* button unit: bezel, face, ridge */
   --chassis: #696970;    /* measured (105,105,112) */
   --header-red: #b35d62; /* measured (179,94,98) */
   --strip-red: #a64649;  /* measured (166,70,73) */
+  --foot: 8;             /* strip height in panel units - see .bay-foot */
   --divider: #c5c6c9;    /* measured (197,198,201) */
   --print: #bebfc1;      /* measured (190,191,193) */
-  max-width: 78rem; margin: 1rem auto 2.6rem; padding: 0 1rem;
+  /* FULL BLEED. A front panel runs the width of the instrument; inset inside
+     a page margin it reads as a picture of one. The wordmark and the tagline
+     keep their inset from the panel edge instead. */
+  max-width: none; margin: 0 0 2.6rem; padding: 0;
 }
 
 /* The bays are columns; their three rows line up across the whole panel
@@ -94,27 +98,40 @@ main { max-width: 46rem; margin: 0 auto; padding: 0 1.5rem 5rem; }
 .site-head .panel {
   display: grid;
   grid-template-columns: minmax(0, 1fr) auto auto auto;
-  grid-template-rows: auto 1fr auto;
+  /* The strip row is given an explicit height rather than left to auto: the
+     divider above has to stop exactly at its top, and a rule cannot measure
+     a row. */
+  grid-template-rows: auto 1fr calc(var(--foot) * var(--pu)) auto;
   column-gap: calc(6 * var(--pu));
   background: var(--chassis);
-  border-radius: 4px; overflow: hidden;
+  overflow: hidden;
 }
-.bay { display: grid; grid-row: 1 / -1; grid-template-rows: subgrid; position: relative; }
+.bay { display: grid; grid-row: 1 / 4; grid-template-rows: subgrid; position: relative; }
 
-/* THE SECTION DIVIDER. On the instrument it runs the chassis, and the header
-   bars stop 3 units short of it at each end - which is why the bars read as
-   separate plates rather than one band. Here the column gap makes the stop
-   and the rule is drawn down the middle of it, from under the bar. */
+/* THE SECTION DIVIDER. The rule runs the chassis BETWEEN the coloured bars -
+   from under the header bar to the top of the bottom strip, meeting both and
+   crossing neither, as it does on the panel. The header bars stop 3 units
+   short of it at each end, which is why they read as separate plates rather
+   than one band; here the column gap makes that stop and the rule is drawn
+   down the middle of it. */
 .bay + .bay::before {
   content: ""; position: absolute;
-  left: calc(-3 * var(--pu) - .75px); top: calc(29 * var(--pu)); bottom: 0;
+  left: calc(-3 * var(--pu) - .75px);
+  top: calc(29 * var(--pu)); bottom: calc(var(--foot) * var(--pu));
   width: calc(1.5 * var(--pu)); background: var(--divider);
 }
 
-/* THE HEADER BAR. 29 units tall, title 27 on a 45 baseline - so the cap sits
-   low in the bar, not centred, and the padding below is 4 units against 5
-   above. White, not the measured #f4f4f6: that reads 4.10:1 on this red and
-   plain white reads 4.51, which clears the bar this app holds itself to. */
+/* THE HEADER BAR. 29 units tall, as measured.
+
+   THE TITLE IS THE ONE DIMENSION THAT IS NOT. The instrument sets it at 27 in
+   that 29-unit bar - a cap filling two thirds of the plate, which works on a
+   panel where the title is the only word in its section and the controls
+   below it carry the weight. Here the section titles sit beside a wordmark
+   and over two buttons, and at 27 they shouted over both. 20 keeps them
+   labels. Everything else in this header stays measured.
+
+   White, not the measured #f4f4f6: that reads 4.10:1 on this red and plain
+   white reads 4.51, which clears the bar this app holds itself to. */
 .bay-head {
   height: calc(29 * var(--pu));
   background: var(--header-red);
@@ -125,7 +142,7 @@ main { max-width: 46rem; margin: 0 auto; padding: 0 1.5rem 5rem; }
      em, so it survives any change of scale. */
   display: flex; align-items: center; justify-content: center;
   padding: .18em calc(16 * var(--pu)) 0;
-  color: #fff; font-size: calc(27 * var(--pu)); font-weight: 400;
+  color: #fff; font-size: calc(20 * var(--pu)); font-weight: 400;
   letter-spacing: 0; text-transform: none; line-height: 1;
   margin: 0; white-space: nowrap;
 }
@@ -133,17 +150,45 @@ main { max-width: 46rem; margin: 0 auto; padding: 0 1.5rem 5rem; }
 
 /* THE BOTTOM STRIP: 5 units of a deeper red than the bar above it. Two reds,
    both measured; it is not one colour used twice. */
-.bay-foot { height: calc(5 * var(--pu)); background: var(--strip-red); }
+/* THE BOTTOM STRIP. The instrument measures 5 units of a deeper red than the
+   bar above it - two reds, both measured; it is not one colour used twice.
+
+   DRAWN AT 8, NOT 5. At the measured weight the strips read as the panel
+   simply ending; a web header wants them to read as rules, and the blue one
+   has a second job since the wordmark gave up its own underline. The colours
+   stay measured, the weight does not.
+
+   ALL STRIPS ARE THE SAME HEIGHT, which is not a detail. The dividers have to
+   stop where they meet a strip, and with a 10-unit blue beside a 7-unit red
+   there is no single height at which they meet both. It is doing a second job - the
+   wordmark used to carry its own blue rule and now this is it, so it has to
+   read as an underline and not just as the panel closing. */
+.bay-foot { height: calc(var(--foot) * var(--pu)); background: var(--strip-red); align-self: end; }
 .bay-logo .bay-foot { background: #2d6cab; }
 
+/* Controls centre under their section title, the way the panel sets them -
+   which only shows on NOTES and CONTACT, whose single button is narrower
+   than its title. DOWNLOAD's pair is already wider than the word above it.
+   The wordmark is the exception: it sits at the left edge of its bay. */
 .bay-body {
-  display: flex; align-items: center; gap: calc(22 * var(--bu));
+  display: flex; align-items: center; justify-content: center;
+  gap: calc(22 * var(--bu));
   padding: calc(16 * var(--pu)) calc(18 * var(--pu));
 }
-.bay-logo .bay-body { padding-left: calc(24 * var(--pu)); }
+/* THE WORDMARK SITS DOWN ON ITS STRIP, not centred in the bay - the way the
+   instrument sets its own name low on the cheek with the strapline under it,
+   rather than floating it in the middle of the face. */
+.bay-logo .bay-body {
+  align-items: flex-end; justify-content: flex-start;
+  padding-left: calc(24 * var(--pu)); padding-bottom: calc(3 * var(--pu));
+}
 
 .wordmark { display: block; color: #fff; text-decoration: none; }
-.wordmark svg { display: block; height: auto; width: clamp(150px, 26vw, 268px); }
+/* The ceiling is in PIXELS on purpose - in rem it depends on the reader's
+   root font size, and at a large one the word grows past its bay. The logo
+   rather than the buttons drives the panel's height at this size, which is
+   what makes the bay deep enough for the word to sit down on its strip. */
+.wordmark svg { display: block; height: auto; width: clamp(190px, 36vw, 460px); }
 .wordmark:hover svg { color: var(--cream); }
 
 /* A PRINTED LABEL OVER ITS BUTTON, as the panel sets them. Not the measured
@@ -156,95 +201,99 @@ main { max-width: 46rem; margin: 0 auto; padding: 0 1.5rem 5rem; }
   white-space: nowrap;
 }
 
-/* THE BUTTON. A thin dark bezel round a face, with a light ridge along the
-   bottom lip - the instrument's own anatomy, drawn in the app by panel-svg.js
-   and copied here rule for rule. The padding is hit area, not bezel: the drawn
-   button is 57 x 38 and the thing you can hit is 69 x 50. */
+/* THE BUTTON IS THE APP'S OWN DRAWING. _includes/panel-button.svg is output
+   from src/panel-svg.js, not a copy of it by hand - bezel, rim, face, inset
+   and the light ridge along the bottom lip, exactly as the app renders a
+   part button. The stylesheet only sizes it and swaps two fills.
+
+   The padding is hit area, not bezel, and the vertical half is in PIXELS:
+   scaled with --bu it would shrink along with the button it is meant to
+   protect, and a 43 x 29 button with proportional padding lands under the
+   44 px a thumb needs. Fixed, the target stays usable however small the
+   drawn button goes. */
 .pbtn {
-  display: block; padding: calc(6 * var(--bu)); border: 0; background: none;
+  display: block; padding: 9px calc(7 * var(--bu)); border: 0; background: none;
   cursor: pointer; line-height: 0; -webkit-tap-highlight-color: transparent;
 }
-.pface {
-  display: block; position: relative;
-  width: calc(57 * var(--bu)); height: calc(38 * var(--bu));
-  border-radius: calc(5 * var(--bu));
-  background: #2b2b31; border: 1.2px solid #4a4a52;
-}
-/* The face: 50 x 29 inside the 57 x 38 bezel, so 3.5 in at the sides and 4.5
-   top and bottom. Unlit is the measured dark face (#47444f), gradient top to
-   bottom the way every face is drawn. */
-.pface::before {
-  content: ""; position: absolute;
-  left: calc(3.5 * var(--bu) - 1.2px); right: calc(3.5 * var(--bu) - 1.2px);
-  top: calc(4.5 * var(--bu) - 1.2px); bottom: calc(4.5 * var(--bu) - 1.2px);
-  border-radius: calc(3 * var(--bu));
-  background: linear-gradient(180deg, #47444f 0%, rgba(71, 68, 79, .78) 100%);
-}
-/* The ridge along the bottom lip: 1.6 units tall, 5 in at each end, 2.6 up
-   from the bezel's bottom edge, #8e909a at 0.6. */
-.pface::after {
-  content: ""; position: absolute;
-  left: calc(5 * var(--bu)); right: calc(5 * var(--bu));
-  bottom: calc(1 * var(--bu)); height: calc(1.6 * var(--bu));
-  border-radius: calc(.8 * var(--bu));
-  background: #8e909a; opacity: .6;
+.pbtn-svg {
+  display: block;
+  width: calc(59 * var(--bu)); height: calc(40 * var(--bu));
 }
 
-/* LIT. Pressed, the face goes to the measured lit blue (#84afd8) under the
-   panel's own radial inset, and the bezel picks up a glow. It goes out when
-   you let go: nothing latches, because nothing has happened yet. */
-.pbtn:active .pface::before {
-  background:
-    radial-gradient(80% 80% at 55% 60%, rgba(10, 16, 48, 0) 55%, rgba(10, 16, 48, .5) 100%),
-    linear-gradient(180deg, #84afd8 0%, rgba(132, 175, 216, .78) 100%);
-}
-.pbtn:active .pface { box-shadow: 0 0 calc(9 * var(--bu)) rgba(132, 175, 216, .55); }
+/* LIT AT REST, in the measured blue. On the instrument a button that does
+   something sits lit; dark means off, and none of these are off. The rim is
+   that colour at 20%, which is the app's own shade(use, 0.2). */
+.pb-rim { fill: #1a232b; }
+.pb-face { fill: url(#jx-face-blue); }
 
-/* THE PAGE YOU ARE ON, lit in the panel's cyan (#bef8fc) - which on the
-   instrument means exactly this: the one that is selected. */
-.pbtn.is-here .pface::before {
-  background:
-    radial-gradient(80% 80% at 55% 60%, rgba(10, 16, 48, 0) 55%, rgba(10, 16, 48, .5) 100%),
-    linear-gradient(180deg, #bef8fc 0%, rgba(190, 248, 252, .78) 100%);
+/* BRIGHTER UNDER THE POINTER, under the press, and on the page you are on:
+   the panel's cyan, which is the selected one of a lit row. All three mean
+   the same thing here - this is the one in play. */
+.pbtn:hover .pb-rim,
+.pbtn:active .pb-rim,
+.pbtn.is-here .pb-rim { fill: #263232; }
+.pbtn:hover .pb-face,
+.pbtn:active .pb-face,
+.pbtn.is-here .pb-face { fill: url(#jx-face-cyan); }
+.pbtn:hover .pbtn-svg,
+.pbtn:active .pbtn-svg,
+.pbtn.is-here .pbtn-svg {
+  filter: drop-shadow(0 0 calc(5 * var(--bu)) rgba(190, 248, 252, .55));
 }
-.pbtn.is-here .pface { box-shadow: 0 0 calc(9 * var(--bu)) rgba(190, 248, 252, .45); }
 
 .pbtn:focus-visible { outline: 2px solid #fff; outline-offset: -2px; border-radius: 4px; }
 
 /* THE STRAPLINE, off the panel and on the page. Sentence case with the hook
    bold - the <strong> is in _config.yml, which is why it survives wherever
-   the tagline is printed. Aligned to the content column below, not to the
-   panel, so it reads as the page's first line. */
+   the tagline is printed.
+
+   ALIGNED TO THE WORDMARK, not to the content column below. It is the
+   panel's caption, so it hangs off the word it describes: the same inset the
+   wordmark takes inside its bay, measured from the same panel edge. Set tight
+   under the bottom strip for the same reason - a caption that drifts down the
+   page starts reading as the first line of the body. */
+/* ONE CONTINUOUS FIELD. The tagline sits on the SAME chassis as the bays, not
+   on a band of its own - so the bottom strips read as rules drawn across the
+   face rather than as the edge the panel stops at. The instrument has a
+   darker lower face (#52525a) and using it here split the header into two
+   plates, which is not what the panel does.
+
+   Type is #f4f4f6, the measured print white, at 4.96:1 on this chassis. The
+   measured print GREY (#bebfc1) reads 2.96 and cannot be used on a screen;
+   the hook goes pure white at 5.45. */
 .site-head .tagline {
-  max-width: 46rem; margin: .7rem auto 0; padding: 0 1.5rem;
-  color: var(--muted); font-size: 1.02rem;
+  grid-column: 1 / -1; grid-row: 4;
+  background: var(--chassis);
+  margin: 0; padding: calc(10 * var(--pu)) calc(24 * var(--pu)) calc(14 * var(--pu));
+  color: #f4f4f6; font-size: 1.02rem; line-height: 1.4;
 }
-.site-head .tagline strong { color: var(--text); }
+.site-head .tagline strong { color: #fff; }
 
 /* PHONE. Four bays will not sit side by side, so the logo takes a row of its
    own and the three function bays share the row beneath it - still the
    panel's grammar, two shelves instead of one. Stacking all four put the
    header alone past the bottom of the first screen. */
 @media (max-width: 52rem) {
-  .site-head { padding: 0 .5rem; --pu: .72px; --bu: .8px; }
+  .site-head { --pu: .72px; --bu: .8px; }
   .site-head .panel {
     grid-template-columns: repeat(3, minmax(0, 1fr));
-    grid-template-rows: auto auto auto auto 1fr auto;
+    grid-template-rows: auto auto auto auto 1fr auto auto;
     row-gap: calc(6 * var(--pu));
   }
   .bay { grid-row: 4 / 7; }
+  .site-head .tagline { grid-row: 7; }
   .bay-logo { grid-column: 1 / -1; grid-row: 1 / 4; }
   /* The first function bay sits at the panel's left edge now, so it has no
      neighbour to be divided from. */
   .bay-logo + .bay::before { display: none; }
   .bay + .bay::before { top: 0; }
-  .bay-head { font-size: calc(24 * var(--pu)); padding: .18em calc(6 * var(--pu)) 0; }
-  .bay-body {
-    justify-content: center; gap: calc(10 * var(--bu));
-    padding: calc(12 * var(--pu)) calc(4 * var(--pu));
+  .bay-head { font-size: calc(18 * var(--pu)); padding: .18em calc(6 * var(--pu)) 0; }
+  .bay-body { gap: calc(10 * var(--bu)); padding: calc(12 * var(--pu)) calc(4 * var(--pu)); }
+  .bay-logo .bay-body { padding-left: calc(16 * var(--pu)); }
+  .site-head .tagline {
+    padding: calc(9 * var(--pu)) calc(16 * var(--pu)) calc(11 * var(--pu));
+    font-size: .97rem;
   }
-  .bay-logo .bay-body { justify-content: flex-start; padding-left: calc(16 * var(--pu)); }
-  .site-head .tagline { padding: 0 1rem; font-size: .97rem; }
 }
 
 /* ── Page typography ──────────────────────────────────────────────────── */

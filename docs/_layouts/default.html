@@ -65,6 +65,17 @@
        SINGLE-CONTROL SECTIONS ARE THE INSTRUMENT'S OWN HABIT - HPF and AMP
        are each a whole labelled section over one slider - so NOTES and
        CONTACT get a bay apiece rather than being crowded under one heading. -->
+  <!-- The panel's gradients, once for the page. Every button references these
+       by id, so they are not repeated four times. Copied verbatim out of
+       panel-svg.js's own <defs>. -->
+  <svg width="0" height="0" aria-hidden="true" style="position:absolute">
+    <defs>
+      <radialGradient id="jx-inset" cx="55%" cy="60%" r="80%"><stop offset="0.55" stop-color="#0a1030" stop-opacity="0"/><stop offset="1" stop-color="#0a1030" stop-opacity="0.5"/></radialGradient>
+      <linearGradient id="jx-face-blue" x1="0" y1="0" x2="0" y2="1"><stop offset="0" stop-color="#84afd8" stop-opacity="1"/><stop offset="1" stop-color="#84afd8" stop-opacity="0.78"/></linearGradient>
+      <linearGradient id="jx-face-cyan" x1="0" y1="0" x2="0" y2="1"><stop offset="0" stop-color="#bef8fc" stop-opacity="1"/><stop offset="1" stop-color="#bef8fc" stop-opacity="0.78"/></linearGradient>
+    </defs>
+  </svg>
+
   <header class="site-head">
     <div class="panel">
       <section class="bay bay-logo">
@@ -88,17 +99,17 @@
         <div class="bay-body">
           {% if site.downloads.mac %}
             <span class="pcell"><span class="plabel">MAC</span>
-              <a class="pbtn" href="{{ site.downloads.mac }}" aria-label="Download for Mac"><span class="pface"></span></a></span>
+              <a class="pbtn" href="{{ site.downloads.mac }}" aria-label="Download for Mac">{% include panel-button.svg %}</a></span>
           {% else %}
             <span class="pcell"><span class="plabel">MAC</span>
-              <button type="button" class="pbtn" title="Not released yet" aria-label="Download for Mac - not released yet"><span class="pface"></span></button></span>
+              <button type="button" class="pbtn" title="Not released yet" aria-label="Download for Mac - not released yet">{% include panel-button.svg %}</button></span>
           {% endif %}
           {% if site.downloads.pc %}
             <span class="pcell"><span class="plabel">PC</span>
-              <a class="pbtn" href="{{ site.downloads.pc }}" aria-label="Download for Windows"><span class="pface"></span></a></span>
+              <a class="pbtn" href="{{ site.downloads.pc }}" aria-label="Download for Windows">{% include panel-button.svg %}</a></span>
           {% else %}
             <span class="pcell"><span class="plabel">PC</span>
-              <button type="button" class="pbtn" title="A Windows build is coming" aria-label="Download for Windows - not released yet"><span class="pface"></span></button></span>
+              <button type="button" class="pbtn" title="A Windows build is coming" aria-label="Download for Windows - not released yet">{% include panel-button.svg %}</button></span>
           {% endif %}
         </div>
         <div class="bay-foot" aria-hidden="true"></div>
@@ -110,7 +121,7 @@
         <div class="bay-body">
           <span class="pcell"><span class="plabel">READ</span>
             <a class="pbtn{% if here contains '/notes' %} is-here{% endif %}" href="{{ '/notes/' | relative_url }}"
-               aria-label="Notes"{% if here contains '/notes' %} aria-current="page"{% endif %}><span class="pface"></span></a></span>
+               aria-label="Notes"{% if here contains '/notes' %} aria-current="page"{% endif %}>{% include panel-button.svg %}</a></span>
         </div>
         <div class="bay-foot" aria-hidden="true"></div>
       </section>
@@ -120,15 +131,16 @@
         <div class="bay-body">
           <span class="pcell"><span class="plabel">WRITE</span>
             <a class="pbtn{% if here contains '/contact' %} is-here{% endif %}" href="{{ '/contact/' | relative_url }}"
-               aria-label="Contact"{% if here contains '/contact' %} aria-current="page"{% endif %}><span class="pface"></span></a></span>
+               aria-label="Contact"{% if here contains '/contact' %} aria-current="page"{% endif %}>{% include panel-button.svg %}</a></span>
         </div>
         <div class="bay-foot" aria-hidden="true"></div>
       </section>
-    </div>
 
-    <!-- Off the panel and on the page, the way the instrument prints its
-         strapline below the chassis rather than inside a section. -->
-    <p class="tagline">{{ site.tagline }}</p>
+      <!-- ON THE CHASSIS, below the bottom strip - the lower face of the
+           instrument, which is where a panel prints the words that belong to
+           the whole machine rather than to one section. -->
+      <p class="tagline">{{ site.tagline }}</p>
+    </div>
   </header>
 
   <main>{{ content }}</main>

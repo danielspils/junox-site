@@ -3,9 +3,8 @@ layout: default
 ---
 
 In 2024 I bought a JUNO-X with the hope of replacing my trusty
-JUNO-106. I intended to use the JUNO-X for upcoming shows so I wouldn't be
-hauling around a vintage synth, which had been a central sound in my studio for
-years. I thought "a digital JUNO-106 … how cool!"
+JUNO-106. I intended to use the JUNO-X for playing live to avoid
+hauling around a vintage synth. I thought "a digital JUNO-106 … how cool!"
 
 If you own a JUNO-X you were probably smirking as you read that last sentence.
 What I learned (and what you know) is that the X is not just a digital 106 with
