@@ -82,6 +82,27 @@ app repo moves.
 
 ## Still to do
 
+**The install note.** Deleted from the homepage on 1 Nov; it was a yellow
+placeholder box addressed to Daniel. The decision it was waiting on has not
+been made, so it comes back as a real sentence or not at all:
+
+- Mac build ships **signed and notarized** → say nothing. No box.
+- Mac build ships **unsigned** → name what macOS will show and what to do
+  about it, BEFORE it happens, the way 7/11 names the Windows SmartScreen
+  warning. A warning nobody warned you about reads as "this is broken".
+
+The style is already in the stylesheet as `.install-note` — a quiet grey line
+under the buttons. Write the sentence into `index.md` wearing that class.
+
+**The "Not yet" box.** Also deleted on 1 Nov. It carried two admissions:
+nothing to download yet, and the Settings page reads but does not write. The
+first stops being true at release. The second is permanent and true, and if it
+belongs anywhere on the site it belongs on a features or FAQ page, stated as a
+design decision rather than a shortfall — the JUNO-X throws away a System edit
+at power-off unless you do a SYSTEM WRITE on the panel, so the app shows the
+setting and the panel route instead of writing something that will not survive
+the night.
+
 **Screenshots.** `assets/img/screenshots/` is empty and `index.md` references
 four pairs of files. Each needs a full PNG and a small JPEG thumbnail at the
 same aspect, named as `index.md` has them:

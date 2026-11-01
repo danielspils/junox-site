@@ -47,52 +47,88 @@
   <script defer src="{{ '/assets/js/download.js' | relative_url }}?v={{ site.time | date: '%s' }}"></script>
 </head>
 <body>
-  <!-- The header is the app's own icon surface: the #2a2a2d face the "Xt"
-       sits on, with the logo's blue rule closing it. Both other sites build
-       their header out of the INSTRUMENT (the JX-3P's bank swoops, the
-       Crumar's panel and felt). This one is built out of the APP, because the
-       JUNO-X's own front panel is already drawn inside the app and copying it
-       onto the web would be two drawings of one thing, drifting. -->
+  <!-- THE JUNO-X FRONT PANEL, three sections instead of nine.
+
+       EVERY NUMBER AND COLOUR BELOW IS MEASURED, not eyeballed. They come
+       from src/panel-layout.js in the app repo, which was measured off
+       docs/Juno-X panel 1.png at 2276 px and verified by a render-and-compare
+       loop (153 of 153 checks). The stylesheet keeps them as panel units so a
+       correction here is one number, the way it is in the app.
+
+       THIS IS NOT A SCALE MODEL. The instrument is 2259.5 units across and
+       this header is about 1216 px. Scaled straight down the section titles
+       land at 14 px and the buttons at 30 x 20. So each family of elements
+       keeps its own internal proportions at its own scale: --pu for bars and
+       type, --bu for buttons. The ratios are the instrument's; the sizes are
+       a web header's.
+
+       SINGLE-CONTROL SECTIONS ARE THE INSTRUMENT'S OWN HABIT - HPF and AMP
+       are each a whole labelled section over one slider - so NOTES and
+       CONTACT get a bay apiece rather than being crowded under one heading. -->
   <header class="site-head">
     <div class="panel">
-      <div class="panel-inner">
-        <!-- Inlined, not an <img>: junox-logo.svg paints the word with
-             fill="currentColor" so it takes the colour of whatever it sits on.
-             An <img> cannot inherit colour, and this is the whole reason the
-             wordmark was traced that way. Do NOT set this word as live text —
-             the face is Eurostile Bold Extended, which is licensed and cannot
-             ship. It is paths. -->
-        <a class="wordmark" href="{{ '/' | relative_url }}" aria-label="{{ site.title }} home">
-          {% include junox-logo.svg %}
-        </a>
-      </div>
-    </div>
-    <div class="strip">
-      <div class="strip-inner">
-        <span class="tagline">{{ site.tagline }}</span>
-        <!-- Phone nav. The strip carries the downloads too, each with the
-             download mark so they read as downloads and not as two more pages.
-             Dimmed and unclickable until site.downloads has a URL — the same
-             thing the dimmed button says in the download block below. -->
-        <nav class="strip-nav">
-          {% capture dl_icon %}<svg class="dl-ico" viewBox="0 0 16 16" aria-hidden="true"
-            fill="none" stroke="currentColor" stroke-width="1.7" stroke-linecap="round"
-            stroke-linejoin="round"><path d="M8 2.5v6.5M5 6.6 8 9.6l3-3"/><path d="M3.4 13h9.2"/></svg>{% endcapture %}
+      <section class="bay bay-logo">
+        <div class="bay-head" aria-hidden="true"></div>
+        <div class="bay-body">
+          <!-- Inlined, not an <img>: junox-logo.svg paints the word with
+               fill="currentColor" so it takes the colour of whatever it sits
+               on. An <img> cannot inherit colour, and this is the whole reason
+               the wordmark was traced that way. Do NOT set this word as live
+               text - the face is Eurostile Bold Extended, which is licensed
+               and cannot ship. It is paths. -->
+          <a class="wordmark" href="{{ '/' | relative_url }}" aria-label="{{ site.title }} home">
+            {% include junox-logo.svg %}
+          </a>
+        </div>
+        <div class="bay-foot" aria-hidden="true"></div>
+      </section>
+
+      <section class="bay">
+        <h2 class="bay-head">DOWNLOAD</h2>
+        <div class="bay-body">
           {% if site.downloads.mac %}
-            <a class="dl-link dl-mac" href="{{ site.downloads.mac }}">{{ dl_icon }}Mac</a>
+            <span class="pcell"><span class="plabel">MAC</span>
+              <a class="pbtn" href="{{ site.downloads.mac }}" aria-label="Download for Mac"><span class="pface"></span></a></span>
           {% else %}
-            <span class="is-soon" title="Not released yet">{{ dl_icon }}Mac</span>
+            <span class="pcell"><span class="plabel">MAC</span>
+              <button type="button" class="pbtn" title="Not released yet" aria-label="Download for Mac - not released yet"><span class="pface"></span></button></span>
           {% endif %}
           {% if site.downloads.pc %}
-            <a class="dl-link dl-pc" href="{{ site.downloads.pc }}">{{ dl_icon }}PC</a>
+            <span class="pcell"><span class="plabel">PC</span>
+              <a class="pbtn" href="{{ site.downloads.pc }}" aria-label="Download for Windows"><span class="pface"></span></a></span>
           {% else %}
-            <span class="is-soon" title="Mac only for now">{{ dl_icon }}PC</span>
+            <span class="pcell"><span class="plabel">PC</span>
+              <button type="button" class="pbtn" title="A Windows build is coming" aria-label="Download for Windows - not released yet"><span class="pface"></span></button></span>
           {% endif %}
-          <a href="{{ '/notes/' | relative_url }}">Notes</a>
-          <a href="{{ '/contact/' | relative_url }}">Contact</a>
-        </nav>
-      </div>
+        </div>
+        <div class="bay-foot" aria-hidden="true"></div>
+      </section>
+
+      {% assign here = page.url | default: '/' %}
+      <section class="bay">
+        <h2 class="bay-head">NOTES</h2>
+        <div class="bay-body">
+          <span class="pcell"><span class="plabel">READ</span>
+            <a class="pbtn{% if here contains '/notes' %} is-here{% endif %}" href="{{ '/notes/' | relative_url }}"
+               aria-label="Notes"{% if here contains '/notes' %} aria-current="page"{% endif %}><span class="pface"></span></a></span>
+        </div>
+        <div class="bay-foot" aria-hidden="true"></div>
+      </section>
+
+      <section class="bay">
+        <h2 class="bay-head">CONTACT</h2>
+        <div class="bay-body">
+          <span class="pcell"><span class="plabel">WRITE</span>
+            <a class="pbtn{% if here contains '/contact' %} is-here{% endif %}" href="{{ '/contact/' | relative_url }}"
+               aria-label="Contact"{% if here contains '/contact' %} aria-current="page"{% endif %}><span class="pface"></span></a></span>
+        </div>
+        <div class="bay-foot" aria-hidden="true"></div>
+      </section>
     </div>
+
+    <!-- Off the panel and on the page, the way the instrument prints its
+         strapline below the chassis rather than inside a section. -->
+    <p class="tagline">{{ site.tagline }}</p>
   </header>
 
   <main>{{ content }}</main>

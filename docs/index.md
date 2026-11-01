@@ -3,9 +3,9 @@ layout: default
 ---
 
 In 2024 I bought a JUNO-X with the hope of replacing my trusty
-Juno-106. I intended to use the JUNO-X for upcoming shows so I wouldn't be
+JUNO-106. I intended to use the JUNO-X for upcoming shows so I wouldn't be
 hauling around a vintage synth, which had been a central sound in my studio for
-years. I thought "a digital Juno-106 … how cool!"
+years. I thought "a digital JUNO-106 … how cool!"
 
 If you own a JUNO-X you were probably smirking as you read that last sentence.
 What I learned (and what you know) is that the X is not just a digital 106 with
@@ -15,7 +15,7 @@ synthesizer.
 
 I tried for 2 years to wrap my head around it. No matter how many YouTube
 tutorials I watched, pages of the manual I read, and Googling I used to crack
-the JUNO-X code, it came up short. Enter **JUNO-Xtra**—an app I wrote to help me
+the JUNO-X code, it came up short. Enter **JUNO-Xtra**—an app I wrote to help
 decode the JUNO-X so I could use more of its features, easily create and back
 up sounds, and save banks as custom setlists.
 
@@ -83,31 +83,7 @@ for the Crumar Seven.
   <li>For Mac &amp; PC</li>
 </ul>
 
-<div class="soon" markdown="1">
-
-## Not yet
-
-<ul class="features">
-  <li><strong>Anything to download.</strong> There is no installer yet: the Mac build isn't signed or packaged, which is why both buttons below are dark. That is the one thing standing between this page and a release.</li>
-  <li><strong>Changing anything on the Settings page.</strong> It reads; it does not write, and that's on purpose: the JUNO-X accepts a System edit while it's powered and throws it away at the next power-off unless you do a SYSTEM WRITE on the panel yourself. So the page shows you the setting and the buttons to press on the instrument, rather than writing something that won't survive the night.</li>
-</ul>
-
-</div>
-
 {% include download-buttons.html %}
-
-<!-- The third and last placeholder. It carries BOTH classes on purpose: .todo
-     so it cannot be published by accident without somebody seeing it, and
-     .install-note so that when the yellow box becomes the real sentence it is
-     already wearing the quiet style that sentence wants. Drop `todo ` from the
-     class and the box becomes the finished line. -->
-<p class="todo install-note" markdown="1">
-**NOTE FOR DANIEL:** this line depends on how the Mac build is signed and
-notarized. If it ships signed, say nothing here. If it doesn't, say what
-macOS will show and what to do about it — the way 7/11 names the Windows
-SmartScreen warning before it happens. A warning nobody warned you about
-reads as "this is broken". Delete this box either way.
-</p>
 
 JUNO-Xtra is free. [Donations]({{ site.donate }}) help cover code signing and
 hosting. Thanks from Seattle! — Daniel

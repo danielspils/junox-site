@@ -58,72 +58,193 @@ body {
    with the first paragraph below it. */
 main { max-width: 46rem; margin: 0 auto; padding: 0 1.5rem 5rem; }
 
-/* ── Header ───────────────────────────────────────────────────────────────
-   A panel sitting on the page, not a full-bleed band: inset, rounded at the
-   top, shallow enough that the wordmark and the strip read as one unit. */
-.site-head { max-width: 78rem; margin: 1rem auto 3rem; padding: 0 1rem; }
+/* ── Header: the JUNO-X front panel ──────────────────────────────
+   MEASURED VALUES, from src/panel-layout.js in the app repo. That file was
+   measured off docs/Juno-X panel 1.png at 2276 px and is held true by a
+   render-and-compare loop (153/153). Kept here as panel units multiplied by a
+   scale, so a correction is one number rather than a sweep of pixel values.
 
+     header bar      y 20-49, so 29 units tall
+     section title   size 27, baseline 45 (cap rows 25-45), fill #f4f4f6
+     bar inset       3 units in from the section divider at each end
+     bottom strip    y 296-301, so 5 units, BREAKING 6 wide at every divider
+     divider         1.5 units wide
+     button (strip)  bezel 57 x 38 rx 5, face 50 x 29 rx 3
+     family          Helvetica - already this site's body face
+
+   TWO SCALES, ON PURPOSE. The instrument is 2259.5 units across; this header
+   is about 1216 px. Scale straight and the titles land at 14 px and the
+   buttons at 30 x 20. So bars and type take --pu and buttons take --bu, each
+   keeping the instrument's internal proportions at a size the web can use. */
+.site-head {
+  --pu: 1px;            /* panel unit: bars, type, dividers */
+  --bu: 1px;             /* button unit: bezel, face, ridge */
+  --chassis: #696970;    /* measured (105,105,112) */
+  --header-red: #b35d62; /* measured (179,94,98) */
+  --strip-red: #a64649;  /* measured (166,70,73) */
+  --divider: #c5c6c9;    /* measured (197,198,201) */
+  --print: #bebfc1;      /* measured (190,191,193) */
+  max-width: 78rem; margin: 1rem auto 2.6rem; padding: 0 1rem;
+}
+
+/* The bays are columns; their three rows line up across the whole panel
+   through subgrid, which is what keeps every header bar on one line however
+   tall a bay's contents are. The column gap IS the instrument's 6-unit break
+   in the bottom strip - one measurement doing both jobs. */
 .site-head .panel {
-  background: var(--panel);
-  border-radius: 10px 10px 0 0;
-  padding: 1.1rem 0 .9rem;
+  display: grid;
+  grid-template-columns: minmax(0, 1fr) auto auto auto;
+  grid-template-rows: auto 1fr auto;
+  column-gap: calc(6 * var(--pu));
+  background: var(--chassis);
+  border-radius: 4px; overflow: hidden;
 }
-.site-head .panel-inner {
-  display: flex; align-items: center;
-  max-width: 46rem; margin: 0 auto; padding: 0 1.5rem;
+.bay { display: grid; grid-row: 1 / -1; grid-template-rows: subgrid; position: relative; }
+
+/* THE SECTION DIVIDER. On the instrument it runs the chassis, and the header
+   bars stop 3 units short of it at each end - which is why the bars read as
+   separate plates rather than one band. Here the column gap makes the stop
+   and the rule is drawn down the middle of it, from under the bar. */
+.bay + .bay::before {
+  content: ""; position: absolute;
+  left: calc(-3 * var(--pu) - .75px); top: calc(29 * var(--pu)); bottom: 0;
+  width: calc(1.5 * var(--pu)); background: var(--divider);
 }
 
-/* The wordmark is an inlined SVG with its own width/height attributes
-   (1306 x 250). Those are overridden here; the ceiling is in PIXELS on
-   purpose — in rem it depends on the reader's root font size, and at a large
-   one the word grows past the panel. */
-.wordmark { display: block; color: #fff; text-decoration: none; }
-.wordmark svg {
-  display: block; height: auto;
-  width: clamp(170px, 42vw, 300px);
+/* THE HEADER BAR. 29 units tall, title 27 on a 45 baseline - so the cap sits
+   low in the bar, not centred, and the padding below is 4 units against 5
+   above. White, not the measured #f4f4f6: that reads 4.10:1 on this red and
+   plain white reads 4.51, which clears the bar this app holds itself to. */
+.bay-head {
+  height: calc(29 * var(--pu));
+  background: var(--header-red);
+  /* The cap is centred in the bar, which is what the instrument does to
+     within a unit (5 above, 4 below). Centring the LINE BOX would sit it high
+     by half the descender space, so the text is pushed down by .18em - the
+     difference between Helvetica's ascent-to-cap gap and its descent. Set in
+     em, so it survives any change of scale. */
+  display: flex; align-items: center; justify-content: center;
+  padding: .18em calc(16 * var(--pu)) 0;
+  color: #fff; font-size: calc(27 * var(--pu)); font-weight: 400;
+  letter-spacing: 0; text-transform: none; line-height: 1;
+  margin: 0; white-space: nowrap;
 }
+.bay-logo .bay-head { background: var(--blue); }
+
+/* THE BOTTOM STRIP: 5 units of a deeper red than the bar above it. Two reds,
+   both measured; it is not one colour used twice. */
+.bay-foot { height: calc(5 * var(--pu)); background: var(--strip-red); }
+.bay-logo .bay-foot { background: #2d6cab; }
+
+.bay-body {
+  display: flex; align-items: center; gap: calc(22 * var(--bu));
+  padding: calc(16 * var(--pu)) calc(18 * var(--pu));
+}
+.bay-logo .bay-body { padding-left: calc(24 * var(--pu)); }
+
+.wordmark { display: block; color: #fff; text-decoration: none; }
+.wordmark svg { display: block; height: auto; width: clamp(150px, 26vw, 268px); }
 .wordmark:hover svg { color: var(--cream); }
 
-/* The strip under the panel: the logo's blue as the closing edge, the tagline
-   on the content column, and on a phone the navigation. */
-.strip {
-  border-bottom: 4px solid var(--blue);
-  border-radius: 0 0 3px 3px;
-  background: linear-gradient(180deg, #3a3a3f 0%, #313136 100%);
-  padding: .5rem 0;
+/* A PRINTED LABEL OVER ITS BUTTON, as the panel sets them. Not the measured
+   print grey (#bebfc1), which reads 2.96:1 on this chassis: on a photographed
+   panel the ink has an edge and a highlight, on a screen it is flat. White
+   reads 5.45:1 and is what a label this small needs. */
+.pcell { display: flex; flex-direction: column; align-items: center; gap: calc(5 * var(--bu)); }
+.plabel {
+  color: #fff; font-size: calc(12.5 * var(--pu)); line-height: 1;
+  white-space: nowrap;
 }
-.strip-inner {
-  display: flex; align-items: baseline; gap: 1rem;
-  max-width: 46rem; margin: 0 auto; padding: 0 1.5rem;
-  color: #d8d8de; font-size: .95rem;
-}
-.strip .tagline { flex: 1; }
 
-.strip-nav { display: none; gap: 1.1rem; }
-.strip-nav a, .strip-nav .is-soon {
-  display: inline-flex; align-items: center; gap: .25rem;
-  color: #d8d8de; text-decoration: none; font-weight: 600; white-space: nowrap;
+/* THE BUTTON. A thin dark bezel round a face, with a light ridge along the
+   bottom lip - the instrument's own anatomy, drawn in the app by panel-svg.js
+   and copied here rule for rule. The padding is hit area, not bezel: the drawn
+   button is 57 x 38 and the thing you can hit is 69 x 50. */
+.pbtn {
+  display: block; padding: calc(6 * var(--bu)); border: 0; background: none;
+  cursor: pointer; line-height: 0; -webkit-tap-highlight-color: transparent;
 }
-.strip-nav a:hover { color: #fff; }
-/* Nothing to download yet: dimmed and inert. Driven by site.downloads, the
-   same switch that dims the buttons in the download block. */
-.strip-nav .is-soon { opacity: .45; cursor: default; }
-.strip-nav .dl-ico { width: .85em; height: .85em; flex: none; }
+.pface {
+  display: block; position: relative;
+  width: calc(57 * var(--bu)); height: calc(38 * var(--bu));
+  border-radius: calc(5 * var(--bu));
+  background: #2b2b31; border: 1.2px solid #4a4a52;
+}
+/* The face: 50 x 29 inside the 57 x 38 bezel, so 3.5 in at the sides and 4.5
+   top and bottom. Unlit is the measured dark face (#47444f), gradient top to
+   bottom the way every face is drawn. */
+.pface::before {
+  content: ""; position: absolute;
+  left: calc(3.5 * var(--bu) - 1.2px); right: calc(3.5 * var(--bu) - 1.2px);
+  top: calc(4.5 * var(--bu) - 1.2px); bottom: calc(4.5 * var(--bu) - 1.2px);
+  border-radius: calc(3 * var(--bu));
+  background: linear-gradient(180deg, #47444f 0%, rgba(71, 68, 79, .78) 100%);
+}
+/* The ridge along the bottom lip: 1.6 units tall, 5 in at each end, 2.6 up
+   from the bezel's bottom edge, #8e909a at 0.6. */
+.pface::after {
+  content: ""; position: absolute;
+  left: calc(5 * var(--bu)); right: calc(5 * var(--bu));
+  bottom: calc(1 * var(--bu)); height: calc(1.6 * var(--bu));
+  border-radius: calc(.8 * var(--bu));
+  background: #8e909a; opacity: .6;
+}
 
-/* Phone: the strip's whole job is the four links. The tagline is the first
-   thing the page says below anyway, and keeping it here squeezes it into a
-   column beside them. THIS BLOCK MUST STAY AFTER the base rules above — on
-   7/11 an earlier media query lost to them on specificity and the nav never
-   appeared at all. */
-@media (max-width: 46rem) {
-  .site-head { padding: 0 .5rem; }
-  .site-head .panel-inner { padding: 0 .9rem; }
-  .strip .tagline { display: none; }
-  .strip-nav {
-    display: flex; flex: 1; flex-wrap: nowrap;
-    justify-content: space-between; gap: .4rem;
+/* LIT. Pressed, the face goes to the measured lit blue (#84afd8) under the
+   panel's own radial inset, and the bezel picks up a glow. It goes out when
+   you let go: nothing latches, because nothing has happened yet. */
+.pbtn:active .pface::before {
+  background:
+    radial-gradient(80% 80% at 55% 60%, rgba(10, 16, 48, 0) 55%, rgba(10, 16, 48, .5) 100%),
+    linear-gradient(180deg, #84afd8 0%, rgba(132, 175, 216, .78) 100%);
+}
+.pbtn:active .pface { box-shadow: 0 0 calc(9 * var(--bu)) rgba(132, 175, 216, .55); }
+
+/* THE PAGE YOU ARE ON, lit in the panel's cyan (#bef8fc) - which on the
+   instrument means exactly this: the one that is selected. */
+.pbtn.is-here .pface::before {
+  background:
+    radial-gradient(80% 80% at 55% 60%, rgba(10, 16, 48, 0) 55%, rgba(10, 16, 48, .5) 100%),
+    linear-gradient(180deg, #bef8fc 0%, rgba(190, 248, 252, .78) 100%);
+}
+.pbtn.is-here .pface { box-shadow: 0 0 calc(9 * var(--bu)) rgba(190, 248, 252, .45); }
+
+.pbtn:focus-visible { outline: 2px solid #fff; outline-offset: -2px; border-radius: 4px; }
+
+/* THE STRAPLINE, off the panel and on the page. Sentence case with the hook
+   bold - the <strong> is in _config.yml, which is why it survives wherever
+   the tagline is printed. Aligned to the content column below, not to the
+   panel, so it reads as the page's first line. */
+.site-head .tagline {
+  max-width: 46rem; margin: .7rem auto 0; padding: 0 1.5rem;
+  color: var(--muted); font-size: 1.02rem;
+}
+.site-head .tagline strong { color: var(--text); }
+
+/* PHONE. Four bays will not sit side by side, so the logo takes a row of its
+   own and the three function bays share the row beneath it - still the
+   panel's grammar, two shelves instead of one. Stacking all four put the
+   header alone past the bottom of the first screen. */
+@media (max-width: 52rem) {
+  .site-head { padding: 0 .5rem; --pu: .72px; --bu: .8px; }
+  .site-head .panel {
+    grid-template-columns: repeat(3, minmax(0, 1fr));
+    grid-template-rows: auto auto auto auto 1fr auto;
+    row-gap: calc(6 * var(--pu));
   }
-  .strip-inner { align-items: center; font-size: .9rem; padding: 0 .8rem; }
+  .bay { grid-row: 4 / 7; }
+  .bay-logo { grid-column: 1 / -1; grid-row: 1 / 4; }
+  /* The first function bay sits at the panel's left edge now, so it has no
+     neighbour to be divided from. */
+  .bay-logo + .bay::before { display: none; }
+  .bay + .bay::before { top: 0; }
+  .bay-head { font-size: calc(24 * var(--pu)); padding: .18em calc(6 * var(--pu)) 0; }
+  .bay-body {
+    justify-content: center; gap: calc(10 * var(--bu));
+    padding: calc(12 * var(--pu)) calc(4 * var(--pu));
+  }
+  .bay-logo .bay-body { justify-content: flex-start; padding-left: calc(16 * var(--pu)); }
+  .site-head .tagline { padding: 0 1rem; font-size: .97rem; }
 }
 
 /* ── Page typography ──────────────────────────────────────────────────── */
@@ -160,7 +281,12 @@ strong { font-weight: 700; }
 
 /* What is not built yet, said once, in its own box. Both other sites keep
    this separate from the feature list rather than mixing a "soon" into it —
-   a list that mixes the two is a list you cannot trust. */
+   a list that mixes the two is a list you cannot trust.
+
+   NOTHING WEARS THIS TODAY. The box was deleted from the homepage on 1 Nov
+   (see README, "Still to do"). The rule stays because the pattern is shared
+   with the two sibling sites and the box returns at release; it costs 5
+   lines and rewriting it later costs more. */
 .soon {
   background: var(--raised); border: 1px solid var(--line); border-radius: 6px;
   padding: .4rem 1.2rem 1.2rem; margin: 2rem 0 0;
@@ -232,17 +358,24 @@ dialog.shot-modal img { display: block; width: 100%; height: auto; border-radius
   .shot-nav { position: fixed; }
 }
 
-/* ── Downloads ────────────────────────────────────────────────────────────
+/* ── Downloads ──────────────────────────────────────────────
    Two buttons under a bracketed DOWNLOAD legend. The bracket is 7/11's
-   treatment (there it is the Crumar's CLAVI TABS hairline); the two coloured
-   platform buttons are jx-3p.com's. The legend and the hairline are the
-   logo's blue, which is the only line on this site that is not grey.
+   treatment (there it is the Crumar's CLAVI TABS hairline); the legend and
+   the hairline are the logo's blue, the only line on this site that is not
+   grey.
 
-   WHY NOT THE JUNO-X's OWN PANEL BUTTONS: the instrument's panel is already
-   drawn, carefully and with a measured palette, inside the app
-   (src/panel-svg.js). A second drawing of it on the web is two drawings of
-   one thing that will drift. If this ever becomes panel artwork it should be
-   generated from the app's, not redrawn. */
+   THE BUTTONS ARE THE JUNO-X's PART BUTTONS. Not panel artwork - the shape
+   language: a dark face, a hairline outline, a small radius, and a colour
+   that appears only when the button is lit. The app draws its part marks the
+   same way (src/index.html, .fx-pdot - 3px radius, outlined when off, filled
+   lit with dark type when on), so the two agree without either one redrawing
+   the other.
+
+   UNLIT IS THE RESTING STATE, NOT A DISABLED ONE. Every part button on the
+   instrument sits dark until you press it. That also happens to be the
+   honest state today: nothing is signed or packaged, so a press lights the
+   button and does nothing else - which is what the paragraph above the block
+   already says in words. */
 .downloads { margin: 1.8rem 0 .9rem; }
 .dl-legend {
   font-size: 1.05rem; font-weight: 700; letter-spacing: .1em;
@@ -255,30 +388,43 @@ dialog.shot-modal img { display: block; width: 100%; height: auto; border-radius
 .dl-btn {
   display: inline-flex; align-items: center; gap: .45rem;
   min-width: 7.2rem; justify-content: center;
-  padding: .7rem 1.3rem; border-radius: 5px;
-  background: var(--panel); border: 1px solid #45454c;
-  font-weight: 700; font-size: 1rem; letter-spacing: .04em;
-  text-decoration: none;
+  padding: .7rem 1.3rem; border-radius: 4px;
+  background: var(--panel); border: 1.5px solid #55555e;
+  font: inherit; font-weight: 700; font-size: 1rem; letter-spacing: .04em;
+  text-decoration: none; cursor: pointer;
+  -webkit-tap-highlight-color: transparent;
+  transition: background .06s linear, border-color .06s linear, color .06s linear;
 }
 .dl-btn .dl-ico { width: 1em; height: 1em; flex: none; }
-/* MAC green, PC blue — the app's own two colours, in their MEASURED variants,
-   because here they are type on a dark face and not a filled block.
+/* MAC green, PC blue - the app's own two colours, in their MEASURED variants,
+   because unlit they are type on a dark face and not a filled block.
    5.33:1 and 5.67:1 on --panel. */
 .dl-btn.is-mac { color: var(--green-lit); }
 .dl-btn.is-pc { color: var(--blue-lit); }
-.dl-btn:hover { background: #35353a; border-color: #6b6b74; }
-.dl-btn:focus-visible { outline: 2px solid var(--blue); outline-offset: 2px; }
+.dl-btn:hover { border-color: #83838e; }
+.dl-btn:focus-visible { outline: 2px solid var(--blue); outline-offset: 3px; }
 
-/* NOTHING TO DOWNLOAD YET. Unavailable is a SHAPE change here, not just a
-   paler colour: the fill goes, the border goes dashed, the pointer does not
-   change. The app made the same correction — a disabled primary button that
-   only dropped to 45% opacity was a slightly different grey on grey, and
-   Daniel is colourblind. */
-.dl-btn.is-soon {
-  background: none; border-style: dashed; border-color: #b9b9c2;
-  color: var(--dim); cursor: default;
+/* LIT. Held down, the button fills with its own colour and the type goes
+   dark - the instrument's part button, and the app's .fx-pdot.is-on. The
+   glow is what separates a LIT button from a merely coloured one at a
+   glance. It goes out when you let go: nothing latches, because nothing has
+   happened. */
+.dl-btn:active { color: #16202b; }
+.dl-btn.is-mac:active {
+  background: var(--green-lit); border-color: var(--green-lit);
+  box-shadow: 0 0 10px rgba(79, 174, 148, .55);
 }
-.dl-btn.is-soon:hover { background: none; border-color: #b9b9c2; }
+.dl-btn.is-pc:active {
+  background: var(--blue-lit); border-color: var(--blue-lit);
+  box-shadow: 0 0 10px rgba(110, 168, 224, .55);
+}
+
+/* NOTHING TO DOWNLOAD YET. No shape change any more - unlit says it, and the
+   paragraph above the block says it in words. The button still presses and
+   still lights; it simply has nothing behind it. */
+.dl-btn.is-soon { cursor: pointer; }
+
+@media (prefers-reduced-motion: reduce) { .dl-btn { transition: none; } }
 
 /* WHICH VERSION THE BUTTON WILL HAND YOU. Ships hidden, revealed only once
    the relay has answered. An absent version is a small loss; a stale one, left
@@ -296,13 +442,6 @@ dialog.shot-modal img { display: block; width: 100%; height: auto; border-radius
   margin: 0 0 1.1rem; max-width: 32rem;
 }
 
-/* The install note is still a PLACEHOLDER, so it carries .todo as well. Both
-   are single-class selectors, which means .install-note below would simply win
-   on source order and quietly repaint the yellow box's text grey — the exact
-   shape the app's DESIGN.md calls "rules that were written to win and lost".
-   So the pairing is stated rather than left to the cascade. Delete this rule
-   when the placeholder goes. */
-.todo.install-note { color: #5a4a20; font-size: .95rem; max-width: none; }
 
 /* PRESENT, NOT ASKED: a line under the buttons, no prompt and nothing to
    dismiss. Nobody donates for software they have not run. */

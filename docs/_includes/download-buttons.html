@@ -2,9 +2,11 @@
      buttons. ONE include, used once on the homepage; if a second page ever
      needs downloads it uses this file rather than its own copy.
 
-     Both buttons are inert while site.downloads is empty — dashed outline, no
-     pointer — which is the same switch that dims the words in the phone
-     strip. Pasting a URL into _config.yml lights up both places at once.
+     Both buttons are inert while site.downloads is empty. They are real
+     <button>s rather than dimmed spans so that a press still LIGHTS them —
+     the JUNO-X part button it is — while nothing is hooked up behind it.
+     Pasting a URL into _config.yml turns each into a link that downloads,
+     and lights the words in the phone strip too.
 
      Today they are both correctly inert: package.json builds `--mac dir
      --arm64` with `identity: null`, so there is no .dmg, no signature and no
@@ -25,13 +27,13 @@
     {% if site.downloads.mac %}
       <a class="dl-btn is-mac" href="{{ site.downloads.mac }}">{{ dl_icon }}MAC</a>
     {% else %}
-      <span class="dl-btn is-mac is-soon" title="Not released yet">{{ dl_icon }}MAC</span>
+      <button type="button" class="dl-btn is-mac is-soon" title="Not released yet">{{ dl_icon }}MAC</button>
     {% endif %}
 
     {% if site.downloads.pc %}
       <a class="dl-btn is-pc" href="{{ site.downloads.pc }}">{{ dl_icon }}PC</a>
     {% else %}
-      <span class="dl-btn is-pc is-soon" title="Mac only for now">{{ dl_icon }}PC</span>
+      <button type="button" class="dl-btn is-pc is-soon" title="A Windows build is coming">{{ dl_icon }}PC</button>
     {% endif %}
   </div>
 </div>
