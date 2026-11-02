@@ -6,10 +6,10 @@ In 2024 I bought a JUNO-X with the hope of replacing my trusty
 JUNO-106. I intended to use the JUNO-X for live shows to avoid
 hauling around its vintage counterpart. I thought "a digital JUNO-106 … how cool!"
 
-If you own a JUNO-X you were probably smirking as you read that last sentence.
+If you own a JUNO-X you were shaking your head as you read that last sentence.
 What I learned (and what you know) is that the X is not just a digital 106 with
 more bells and whistles. The "106-ness" of the X is mostly in its hardware
-design—and I soon learned that the JUNO-X was a really complicated
+design—and I soon learned that the JUNO-X is a really complicated
 synthesizer.
 
 I tried for 2 years to wrap my head around it. No matter how many YouTube
@@ -21,7 +21,7 @@ up sounds, and save custom setlists.
 It's late 2026 and I'm just now beginning to understand the complicatedly cool
 JUNO-X. I hope the JUNO-Xtra app helps you do the same.
 
-This is my third synth app. If you're a fellow synthaholic, see also:
+P.S. This is my third synth app. If you're a fellow synthaholic, see also:
 [JP Patches](https://jx-3p.com){:target="_blank" rel="noopener"} for the JX-3P
 and [This Seven Goes to Eleven](https://thissevengoestoeleven.com){:target="_blank" rel="noopener"}
 for the Crumar Seven.
