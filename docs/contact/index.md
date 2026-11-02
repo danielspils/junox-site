@@ -7,8 +7,8 @@ description: Send a note about JUNO-Xtra — bugs, missing features, or what you
 ## Contact
 
 Bugs, missing features, something your JUNO-X does that mine doesn't — all
-welcome. If it's a bug, the firmware version and what you were doing when it
-happened save a round trip.
+welcome. If it’s a bug, please include the firmware version and what you were
+doing when it happened. That helps a ton.
 
 <!-- Web3Forms: a form that posts somewhere without this site having a backend
      of its own, which is how 7/11's contact page works. THE ACCESS KEY BELOW

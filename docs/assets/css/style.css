@@ -103,7 +103,19 @@ main { max-width: 46rem; margin: 0 auto; padding: 0 1.5rem 5rem; }
    through subgrid, which is what keeps every header bar on one line however
    tall a bay's contents are. The column gap IS the instrument's 6-unit break
    in the bottom strip - one measurement doing both jobs. */
-.site-head .panel {
+/* THE PANEL BLEEDS; THE DECK SITS ON THE COLUMN. The chassis runs the width of
+   the browser - a front panel does - but the wordmark, the buttons and the
+   tagline line up with the page text below, so the header reads as the top of
+   this page rather than as a band laid across it.
+
+   The coloured bars have to reach the edge too, and they are grid items inside
+   the deck. They get there with a box-shadow the width of the viewport, clipped
+   by the panel's own overflow: the first bay's bars run left, the last bay's
+   run right, and the chassis between them is the panel's own background. A
+   second element either side would have been two more things to keep in step
+   with the bars' colours and heights. */
+.site-head .panel { background: var(--chassis); overflow: hidden; }
+.site-head .deck {
   display: grid;
   grid-template-columns: minmax(0, 1fr) auto auto auto;
   /* The strip row is given an explicit height rather than left to auto: the
@@ -111,9 +123,30 @@ main { max-width: 46rem; margin: 0 auto; padding: 0 1.5rem 5rem; }
      a row. */
   grid-template-rows: auto 1fr calc(var(--foot) * var(--pu)) auto;
   column-gap: calc(6 * var(--pu));
-  background: var(--chassis);
-  overflow: hidden;
+  max-width: 46rem; margin: 0 auto;
 }
+/* 24 panel units is the wordmark's inset inside its bay and 1.5rem is the body
+   column's padding - the same 24px, which is what puts the word over the first
+   sentence. If either moves, move the other.
+
+   ONLY THE BARS BLEED. The chassis between them is the panel's own background
+   and already runs the full width, so the body and tagline rows need nothing.
+
+   AN EXTENSION, NOT A SHADOW. This was a box-shadow offset by 100vw, which is
+   wrong and looked it: a shadow with no spread paints a COPY of the box the
+   same size, shifted - so a 300px bar put a 300px block of colour a screen
+   away and left the gutter beside it bare. These are elements: same height as
+   the bar by top/bottom, a viewport wide, taking the bar's own background by
+   inherit so no colour is written down twice. The panel's overflow clips
+   them, so none of this can scroll the page sideways. */
+.bay-logo .bay-head, .bay-logo .bay-foot,
+.bay:last-of-type .bay-head, .bay:last-of-type .bay-foot { position: relative; }
+.bay-logo .bay-head::after, .bay-logo .bay-foot::after,
+.bay:last-of-type .bay-head::after, .bay:last-of-type .bay-foot::after {
+  content: ""; position: absolute; top: 0; bottom: 0; width: 100vw; background: inherit;
+}
+.bay-logo .bay-head::after, .bay-logo .bay-foot::after { right: 100%; }
+.bay:last-of-type .bay-head::after, .bay:last-of-type .bay-foot::after { left: 100%; }
 .bay { display: grid; grid-row: 1 / 4; grid-template-rows: subgrid; position: relative; }
 
 /* THE SECTION DIVIDER, measured. panel-svg.js draws it as
@@ -207,12 +240,17 @@ main { max-width: 46rem; margin: 0 auto; padding: 0 1.5rem 5rem; }
   padding-left: calc(24 * var(--pu)); padding-bottom: calc(3 * var(--pu));
 }
 
-.wordmark { display: block; color: #fff; text-decoration: none; }
-/* The ceiling is in PIXELS on purpose - in rem it depends on the reader's
-   root font size, and at a large one the word grows past its bay. The logo
-   rather than the buttons drives the panel's height at this size, which is
-   what makes the bay deep enough for the word to sit down on its strip. */
-.wordmark svg { display: block; height: auto; width: clamp(190px, 36vw, 460px); }
+/* THE WORD IS SIZED FROM ITS BAY, NOT THE VIEWPORT. It used to take 36vw,
+   which was right while the panel ran the full width of the browser. The deck
+   is 46rem now and the three function bays take what they need from it, so
+   36vw overflowed the logo bay and the word ran under the buttons. Filling
+   the bay is the honest measure: the word gets whatever is left once
+   DOWNLOAD, NOTES and CONTACT have had their width.
+
+   The ceiling is in PIXELS on purpose - in rem it depends on the reader's
+   root font size, and at a large one the word grows past its bay. */
+.wordmark { display: block; flex: 1 1 auto; min-width: 0; color: #fff; text-decoration: none; }
+.wordmark svg { display: block; height: auto; width: 100%; max-width: 300px; }
 .wordmark:hover svg { color: var(--cream); }
 
 /* A PRINTED LABEL OVER ITS BUTTON, as the panel sets them. 11 units, which is
@@ -304,7 +342,7 @@ main { max-width: 46rem; margin: 0 auto; padding: 0 1.5rem 5rem; }
    header alone past the bottom of the first screen. */
 @media (max-width: 52rem) {
   .site-head { --pu: .72px; --bu: .8px; }
-  .site-head .panel {
+  .site-head .deck {
     grid-template-columns: repeat(3, minmax(0, 1fr));
     grid-template-rows: auto auto auto auto 1fr auto auto;
     row-gap: calc(6 * var(--pu));
@@ -324,9 +362,12 @@ main { max-width: 46rem; margin: 0 auto; padding: 0 1.5rem 5rem; }
   .bay-logo + .bay::before { display: none; }
   .bay-head { font-size: calc(15 * var(--pu)); padding: .18em calc(6 * var(--pu)) 0; }
   .bay-body { gap: calc(10 * var(--bu)); padding: calc(12 * var(--pu)) calc(4 * var(--pu)); }
-  .bay-logo .bay-body { padding-left: calc(16 * var(--pu)); }
+  /* 1.5rem, not a panel-unit count: this is the BODY COLUMN's padding, and the
+     wordmark lines up with the first sentence or it does not. A unit count
+     scales with --pu and drifted 12px out here. */
+  .bay-logo .bay-body { padding-left: 1.5rem; }
   .site-head .tagline {
-    padding: calc(9 * var(--pu)) calc(16 * var(--pu)) calc(11 * var(--pu));
+    padding: calc(9 * var(--pu)) 1.5rem calc(11 * var(--pu));
     font-size: .97rem;
   }
 }
