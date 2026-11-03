@@ -82,6 +82,10 @@ app repo moves.
 
 ## Still to do
 
+**The one ordered list is in the app repo: `roland-junox-editor/docs/release-v1.md`.** It covers both repos - the
+four things that actually block a release, the site's loose ends, and the app gaps to decide on rather than drift
+past. What follows here is the site-side detail that list points at.
+
 **A /metrics page, and the plumbing before the first release.** Daniel, 2 Nov 2026: metrics in the style of JP
 Patches' (`https://jx-3p.com/metrics/`), and *"Metrics from the get go this time."* That page was itself rebuilt
 section-for-section against the Seven's as a shared template, so the layout exists twice already.

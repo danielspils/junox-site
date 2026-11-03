@@ -99,7 +99,7 @@
                hidden and the three bays stay visible stacked - which is a
                worse layout, not a broken one. -->
           <button type="button" class="burger" aria-expanded="false"
-                  aria-controls="head-nav" aria-label="Menu">
+                  aria-controls="menu" aria-label="Menu">
             <span aria-hidden="true"></span><span aria-hidden="true"></span><span aria-hidden="true"></span>
           </button>
         </div>
@@ -158,6 +158,22 @@
            instrument, which is where a panel prints the words that belong to
            the whole machine rather than to one section. -->
       <p class="tagline">{{ site.tagline }}</p>
+
+      <!-- THE NARROW MENU: a plain list, not the panel bays stacked. Daniel,
+           2 Nov 2026: "a hamburger menu with a regular menu, not the buttons".
+           Drawn only under the burger breakpoint, where the bays above are not
+           drawn at all - so the four destinations exist twice in this file,
+           once as panel bays for a wide screen and once as rows for a narrow
+           one. THEY MUST STAY IN STEP: a destination added above is added
+           here too, or the phone quietly loses it. -->
+      <nav class="menu" id="menu" aria-label="Site">
+        {% if site.downloads.mac %}<a href="{{ site.downloads.mac }}">Mac download</a>
+        {% else %}<span class="is-soon">Mac download</span>{% endif %}
+        {% if site.downloads.pc %}<a href="{{ site.downloads.pc }}">PC download</a>
+        {% else %}<span class="is-soon">PC download</span>{% endif %}
+        <a href="{{ '/notes/' | relative_url }}">Blog</a>
+        <a href="{{ '/contact/' | relative_url }}">Contact</a>
+      </nav>
       </div>
     </div>
   </header>

@@ -268,7 +268,12 @@ main { max-width: 46rem; margin: 0 auto; padding: 0 1.5rem 5rem; }
    measured ~380px against a 300px cap). Chromium honours it, which is why
    this never showed up in testing. The <a> is an ordinary block and caps
    predictably; the svg then simply fills it. */
-.wordmark { display: block; flex: 1 1 auto; min-width: 0; max-width: 300px; color: #fff; text-decoration: none; }
+/* flex-basis, NOT max-width. The cap was max-width on the <svg> first, which
+   Safari ignores on a replaced element sized width:100%; moving it to the <a>
+   was not enough either - on an iPhone the word still took more than 300 and
+   pushed the burger onto its own line. A basis of 300 that may shrink and may
+   not grow says the same thing in the one place flex is certain to honour. */
+.wordmark { display: block; flex: 0 1 300px; min-width: 0; color: #fff; text-decoration: none; }
 .wordmark svg { display: block; height: auto; width: 100%; }
 .wordmark:hover svg { color: var(--cream); }
 
@@ -368,6 +373,19 @@ main { max-width: 46rem; margin: 0 auto; padding: 0 1.5rem 5rem; }
 .burger > span { display: block; width: 26px; height: 3px; border-radius: 1px; background: #fff; }
 .burger:focus-visible { outline: 2px solid #fff; outline-offset: 3px; }
 
+/* THE NARROW MENU IS TEXT, not the panel stacked. Daniel, 2 Nov 2026: "a
+   hamburger menu with a regular menu, not the buttons" and "just text within
+   the expanded menu". Four rows on the chassis, divided by the panel's own
+   rule colour, each a full-width target. A row with nothing behind it yet is
+   dimmed and is not a link, so it cannot be tapped to no effect. */
+.menu { display: none; }
+.menu > a, .menu > span {
+  display: block; padding: 14px 1.5rem; color: #fff; text-decoration: none;
+  font-size: 1.02rem; border-top: 1px solid rgba(197, 198, 201, .22);
+}
+.menu > a:active { background: rgba(255, 255, 255, .09); }
+.menu > .is-soon { color: #c2c2cb; opacity: .65; }
+
 /* NARROW: ONE TREATMENT, NOT TWO. There used to be a middle layout here - the
    three bays side by side on one shelf - which was cramped from about 420px
    down and needed its own rules for button wrapping and title sizes. Daniel,
@@ -383,14 +401,20 @@ main { max-width: 46rem; margin: 0 auto; padding: 0 1.5rem 5rem; }
 @media (max-width: 52rem) {
   .site-head { --pu: .72px; --bu: .8px; }
   .site-head.has-burger .burger { display: flex; }
+  /* the menu is drawn at this width only; .has-burger then decides open/shut */
+  .site-head .menu { display: block; }
   .site-head .deck { display: flex; flex-direction: column; }
   /* subgrid needs a grid parent; without one the bay's three rows stack, which
      is what is wanted anyway */
   .bay { display: block; }
-  .headnav { display: block; order: 3; }
   .bay-logo { order: 1; }
   .site-head .tagline { order: 2; }
-  .site-head.has-burger:not(.is-open) .headnav { display: none; }
+  /* THE PANEL BAYS ARE A WIDE-SCREEN THING ONLY. They are not what the burger
+     opens - the menu below is - so here they are gone outright rather than
+     hidden and waiting. */
+  .headnav { display: none; }
+  .menu { order: 3; }
+  .site-head.has-burger:not(.is-open) .menu { display: none; }
   /* stacked, the bays are full width and there is nothing to divide */
   .bay:not(.bay-logo)::before { display: none; }
   .bay-logo .bay-body { justify-content: space-between; padding-left: 1.5rem; padding-right: 1rem; }
