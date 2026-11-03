@@ -34,9 +34,9 @@ baseurl: ""
 # dimmed word in the phone strip. Paste a URL here and both light up together.
 # There is no second switch to forget.
 #
-# TODAY BOTH ARE EMPTY AND THAT IS CORRECT. package.json builds `--mac dir
-# --arm64` with `identity: null`: there is no .dmg, no signature, and no
-# Windows target. Nothing exists to link to.
+# TODAY BOTH ARE EMPTY AND THAT IS CORRECT. package.json gained a signed .dmg
+# and an NSIS Windows target on 3 Nov 2026, but neither has been built yet, so
+# there is still nothing to link to.
 #
 # WHEN THERE IS: point these at a relay, not at GitHub. Both other sites do
 # (lend.jx-3p.com, ping.thissevengoestoeleven.com). The relay 302s to the

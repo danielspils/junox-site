@@ -7,6 +7,11 @@ JUNO-X. Jekyll, served by GitHub Pages from `/docs`.
 apart: `crumar-seven-editor` (app) and `this-seven-goes-to-eleven` (site) got
 crossed once because the names were close, and this pair is closer.
 
+**`CLAUDE.md` is the rules file.** Read it before touching the code: the panel
+header's measured values, the traps that cost a round each (full bleed, the
+divider ratio, Safari and SVG widths), and how to verify a change without a
+local server. This README is the to-do list; that one is the how.
+
 ## How it is built
 
 Both existing sites are Jekyll with **no `theme:` key**, a hand-written
@@ -20,11 +25,10 @@ To see it locally you need Ruby and Jekyll (`bundle exec jekyll serve`). If
 that isn't installed, push to a branch and point Pages at it — that is the
 shortest path to looking at it.
 
-`preview-homepage.html` at the repo root is the homepage with every Liquid tag
-resolved by hand and the CSS, JS and wordmark inlined, so it opens by
-double-clicking with no server. **It does not update itself** — it is a
-snapshot, and it is outside `docs/`, so it is never published. Re-make it, or
-delete it, after changing `index.md`, `_layouts/default.html` or `_config.yml`.
+There is no checked-in preview file. One existed and was deleted, because a
+hand-resolved snapshot of the homepage goes stale the moment the layout changes
+and then quietly misleads. Build the page in a scratch directory when it needs
+looking at, and leave nothing behind.
 
 ```
 docs/
@@ -166,14 +170,14 @@ not by configuration.
 at goatcounter.com first, then put the code in `_config.yml`.
 
 **A downloadable build.** This is the launch blocker, and it is in the app
-repo, not here. `package.json` builds `--mac dir --arm64` with
-`identity: null`: a `.app` folder, unsigned, with no `.dmg` and no Windows
-target. Both download buttons are correctly inert until that changes, and the
-homepage says so in the "Not yet" box.
+repo, not here. As of 3 Nov 2026 `package.json` builds a signed, notarised
+`.dmg` plus a `.zip`, and an NSIS x64 Windows installer on a GitHub Actions
+runner - **but neither has been run yet.** Both download buttons stay correctly
+inert until there is a real artifact to point them at. See
+`roland-junox-editor/docs/release-v1.md` blockers 2 and 3.
 
 ## Decisions this scaffold is waiting on
 
-- **The repo name.** `junox-site` was the recommendation. Not created yet.
 - **Whether the Mac build is signed.** It decides whether the first-run note on
   the homepage exists at all; the placeholder is marked on the page.
 - **Daniel's opening paragraph.** Marked on the page.
