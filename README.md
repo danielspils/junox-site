@@ -82,6 +82,19 @@ app repo moves.
 
 ## Still to do
 
+**A /metrics page, and the plumbing before the first release.** Daniel, 2 Nov 2026: metrics in the style of JP
+Patches' (`https://jx-3p.com/metrics/`), and *"Metrics from the get go this time."* That page was itself rebuilt
+section-for-section against the Seven's as a shared template, so the layout exists twice already.
+
+The timing is the instruction, not an aside. JP's numbers carry two holes that cannot be filled now, both from
+fitting measurement to an app that had already shipped: one day of button presses expired before the durable
+rollups existed to catch them, and the daily ping only exists from v0.8.8, so every older install is invisible and
+the page has to say so. Shipping the relay, the daily keys, the rollups and the ping BEFORE the first public build
+avoids both - the series starts at zero with no floor and no gap.
+
+The app side of this is in `roland-junox-editor/docs/planned.md`, which carries the population definitions and the
+two counting rules that came with them.
+
 **The install note.** Deleted from the homepage on 1 Nov; it was a yellow
 placeholder box addressed to Daniel. The decision it was waiting on has not
 been made, so it comes back as a real sentence or not at all:

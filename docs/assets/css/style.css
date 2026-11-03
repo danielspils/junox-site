@@ -140,13 +140,18 @@ main { max-width: 46rem; margin: 0 auto; padding: 0 1.5rem 5rem; }
    inherit so no colour is written down twice. The panel's overflow clips
    them, so none of this can scroll the page sideways. */
 .bay-logo .bay-head, .bay-logo .bay-foot,
-.bay:last-of-type .bay-head, .bay:last-of-type .bay-foot { position: relative; }
+.headnav > .bay:last-child .bay-head, .headnav > .bay:last-child .bay-foot { position: relative; }
 .bay-logo .bay-head::after, .bay-logo .bay-foot::after,
-.bay:last-of-type .bay-head::after, .bay:last-of-type .bay-foot::after {
+.headnav > .bay:last-child .bay-head::after, .headnav > .bay:last-child .bay-foot::after {
   content: ""; position: absolute; top: 0; bottom: 0; width: 100vw; background: inherit;
 }
 .bay-logo .bay-head::after, .bay-logo .bay-foot::after { right: 100%; }
-.bay:last-of-type .bay-head::after, .bay:last-of-type .bay-foot::after { left: 100%; }
+.headnav > .bay:last-child .bay-head::after, .headnav > .bay:last-child .bay-foot::after { left: 100%; }
+/* THE WRAPPER IS NOT THERE ON A WIDE SCREEN. display:contents takes its box
+   away, so the three bays stay direct grid items of the deck and the panel is
+   exactly what it was; the narrow query below turns it back into a real box
+   for the burger to hide. */
+.headnav { display: contents; }
 .bay { display: grid; grid-row: 1 / 4; grid-template-rows: subgrid; position: relative; }
 
 /* THE SECTION DIVIDER, measured. panel-svg.js draws it as
@@ -170,7 +175,7 @@ main { max-width: 46rem; margin: 0 auto; padding: 0 1.5rem 5rem; }
    app's old flat 8 units off the top gives three times the real gap. Running
    the rule corner to corner gives none at all, and doubles a division the
    bars already make with their own gaps. */
-.bay + .bay::before {
+.bay:not(.bay-logo)::before {
   content: ""; position: absolute;
   left: calc(-4.5 * var(--pu));
   top: calc((var(--bar) + var(--bar) * var(--divider-clear)) * var(--pu));
@@ -227,8 +232,15 @@ main { max-width: 46rem; margin: 0 auto; padding: 0 1.5rem 5rem; }
    which only shows on NOTES and CONTACT, whose single button is narrower
    than its title. DOWNLOAD's pair is already wider than the word above it.
    The wordmark is the exception: it sits at the left edge of its bay. */
+/* THE BUTTONS WRAP RATHER THAN ESCAPE. Three bays across a 360px phone give
+   DOWNLOAD about 120px, and its two buttons plus their hit padding need more
+   than that - they used to hang over the divider into NOTES. Wrapping fixes
+   it at every width without a breakpoint and without shrinking the buttons
+   below a thumb: on a narrow phone the pair stacks, all three bays grow by a
+   row together because they share the subgrid, and nothing moves on a wide
+   screen. */
 .bay-body {
-  display: flex; align-items: center; justify-content: center;
+  display: flex; align-items: center; justify-content: center; flex-wrap: wrap;
   gap: calc(22 * var(--bu));
   padding: calc(16 * var(--pu)) calc(18 * var(--pu));
 }
@@ -249,8 +261,15 @@ main { max-width: 46rem; margin: 0 auto; padding: 0 1.5rem 5rem; }
 
    The ceiling is in PIXELS on purpose - in rem it depends on the reader's
    root font size, and at a large one the word grows past its bay. */
-.wordmark { display: block; flex: 1 1 auto; min-width: 0; color: #fff; text-decoration: none; }
-.wordmark svg { display: block; height: auto; width: 100%; max-width: 300px; }
+/* THE CAP IS ON THE LINK, NOT ON THE SVG. It was max-width on the <svg>
+   itself, which Safari does not honour reliably on a replaced element sized
+   width:100% with height:auto - on an iPhone the word took the full width of
+   its bay and ran off the screen (Daniel, 2 Nov 2026, iPhone 16 Pro, where it
+   measured ~380px against a 300px cap). Chromium honours it, which is why
+   this never showed up in testing. The <a> is an ordinary block and caps
+   predictably; the svg then simply fills it. */
+.wordmark { display: block; flex: 1 1 auto; min-width: 0; max-width: 300px; color: #fff; text-decoration: none; }
+.wordmark svg { display: block; height: auto; width: 100%; }
 .wordmark:hover svg { color: var(--cream); }
 
 /* A PRINTED LABEL OVER ITS BUTTON, as the panel sets them. 11 units, which is
@@ -336,38 +355,49 @@ main { max-width: 46rem; margin: 0 auto; padding: 0 1.5rem 5rem; }
 }
 .site-head .tagline strong { color: #fff; }
 
-/* PHONE. Four bays will not sit side by side, so the logo takes a row of its
-   own and the three function bays share the row beneath it - still the
-   panel's grammar, two shelves instead of one. Stacking all four put the
-   header alone past the bottom of the first screen. */
+/* THE BURGER. Three bars, in the panel's own print white, sized from the bay
+   titles so it reads as part of the panel rather than a web widget dropped on
+   it. Hidden until the script adds .has-burger: without JavaScript the three
+   bays stay visible, stacked, which is a worse layout and not a broken one. */
+.burger {
+  display: none; flex-direction: column; justify-content: center; align-items: center; gap: 5px;
+  margin-left: auto; padding: 12px 9px; min-width: 44px; min-height: 44px;
+  border: 0; background: none;
+  cursor: pointer; -webkit-tap-highlight-color: transparent;
+}
+.burger > span { display: block; width: 26px; height: 3px; border-radius: 1px; background: #fff; }
+.burger:focus-visible { outline: 2px solid #fff; outline-offset: 3px; }
+
+/* NARROW: ONE TREATMENT, NOT TWO. There used to be a middle layout here - the
+   three bays side by side on one shelf - which was cramped from about 420px
+   down and needed its own rules for button wrapping and title sizes. Daniel,
+   2 Nov 2026: "generally, the hamburger menu is the way to go." So everything
+   under the desktop panel gets the same thing: the logo, the tagline under it,
+   and the three bays behind a button.
+
+   THE TAGLINE SITS UNDER THE WORDMARK AT EVERY WIDTH - "if buttons ... tagline
+   below JUNO-Xtra (not below buttons)". In the markup it comes after the bays,
+   because on a wide screen it is the row beneath them. Here `order` puts it
+   back under the word without moving it in the document, so the reading order
+   a screen reader follows is the same one the eye follows. */
 @media (max-width: 52rem) {
   .site-head { --pu: .72px; --bu: .8px; }
-  .site-head .deck {
-    grid-template-columns: repeat(3, minmax(0, 1fr));
-    grid-template-rows: auto auto auto auto 1fr auto auto;
-    row-gap: calc(6 * var(--pu));
-  }
-  .bay { grid-row: 4 / 7; }
-  .site-head .tagline { grid-row: 7; }
-  .bay-logo { grid-column: 1 / -1; grid-row: 1 / 4; }
-  /* The first function bay sits at the panel's left edge now, so it has no
-     neighbour to be divided from.
-
-     THE RULE ITSELF IS NOT TOUCHED HERE. It was overridden when this query
-     stacked all four bays and the divider between them ran horizontally;
-     once the three function bays moved onto one shelf the override was left
-     behind, measuring the clearance from the top of the bay instead of from
-     the bottom of the bar - which started the rule inside the red and ran it
-     through. The base rule is correct at every width. */
-  .bay-logo + .bay::before { display: none; }
-  .bay-head { font-size: calc(15 * var(--pu)); padding: .18em calc(6 * var(--pu)) 0; }
-  .bay-body { gap: calc(10 * var(--bu)); padding: calc(12 * var(--pu)) calc(4 * var(--pu)); }
-  /* 1.5rem, not a panel-unit count: this is the BODY COLUMN's padding, and the
-     wordmark lines up with the first sentence or it does not. A unit count
-     scales with --pu and drifted 12px out here. */
-  .bay-logo .bay-body { padding-left: 1.5rem; }
+  .site-head.has-burger .burger { display: flex; }
+  .site-head .deck { display: flex; flex-direction: column; }
+  /* subgrid needs a grid parent; without one the bay's three rows stack, which
+     is what is wanted anyway */
+  .bay { display: block; }
+  .headnav { display: block; order: 3; }
+  .bay-logo { order: 1; }
+  .site-head .tagline { order: 2; }
+  .site-head.has-burger:not(.is-open) .headnav { display: none; }
+  /* stacked, the bays are full width and there is nothing to divide */
+  .bay:not(.bay-logo)::before { display: none; }
+  .bay-logo .bay-body { justify-content: space-between; padding-left: 1.5rem; padding-right: 1rem; }
+  .bay-head { font-size: calc(17 * var(--pu)); padding: .18em 1.5rem 0; justify-content: flex-start; }
+  .bay-body { gap: calc(16 * var(--bu)); padding: calc(12 * var(--pu)) 1.5rem; justify-content: flex-start; }
   .site-head .tagline {
-    padding: calc(9 * var(--pu)) 1.5rem calc(11 * var(--pu));
+    padding: calc(9 * var(--pu)) 1.5rem calc(13 * var(--pu));
     font-size: .97rem;
   }
 }

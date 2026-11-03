@@ -94,10 +94,22 @@
           <a class="wordmark" href="{{ '/' | relative_url }}" aria-label="{{ site.title }} home">
             {% include junox-logo.svg %}
           </a>
+          <!-- SHOWN ONLY ONCE THE SCRIPT HAS RUN and only on a narrow screen.
+               Without JavaScript .has-burger never lands, this button stays
+               hidden and the three bays stay visible stacked - which is a
+               worse layout, not a broken one. -->
+          <button type="button" class="burger" aria-expanded="false"
+                  aria-controls="head-nav" aria-label="Menu">
+            <span aria-hidden="true"></span><span aria-hidden="true"></span><span aria-hidden="true"></span>
+          </button>
         </div>
         <div class="bay-foot" aria-hidden="true"></div>
       </section>
 
+      <!-- THE THREE FUNCTION BAYS, wrapped so the burger has one thing to hide.
+           display:contents on a wide screen, so they stay direct grid items of
+           the deck and the panel is unchanged; a real box on a narrow one. -->
+      <div class="headnav" id="head-nav">
       <section class="bay">
         <h2 class="bay-head">DOWNLOAD</h2>
         <div class="bay-body">
@@ -140,6 +152,8 @@
         <div class="bay-foot" aria-hidden="true"></div>
       </section>
 
+      </div><!-- /.headnav -->
+
       <!-- ON THE CHASSIS, below the bottom strip - the lower face of the
            instrument, which is where a panel prints the words that belong to
            the whole machine rather than to one section. -->
@@ -147,6 +161,18 @@
       </div>
     </div>
   </header>
+  <script>
+    (function () {
+      var h = document.querySelector('.site-head');
+      var b = h && h.querySelector('.burger');
+      if (!h || !b) return;
+      h.classList.add('has-burger');
+      b.addEventListener('click', function () {
+        var open = h.classList.toggle('is-open');
+        b.setAttribute('aria-expanded', open ? 'true' : 'false');
+      });
+    })();
+  </script>
 
   <main>{{ content }}</main>
 
